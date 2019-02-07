@@ -1,0 +1,13 @@
+﻿<ifModule mod_headers.c>
+    #кэшировать флэш и изображения на 10 минут
+    <FilesMatch "\.(flv|swf|ico|gif|jpg|jpeg|png|woff2)$">
+        Header set Cache-Control "max-age=600"
+    </FilesMatch>
+
+    #кэшировать CSS, JavaScript и текстовые файлы на 10 минут
+    <FilesMatch "\.(js|css|txt)$">
+        Header set Cache-Control "max-age=600"
+    </FilesMatch>
+
+
+</IfModule>
