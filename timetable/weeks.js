@@ -78,6 +78,7 @@ function week() {
         if (__table === undefined || __table == '') {
             console.error(_table);
         } else {
+            //ttt
             _minMax = _table.getElementsByTagName('td')[i].innerText;
             __minMax = _minMax;
             if (_minMax.length !== 0 || _minMax != '') {
