@@ -89,9 +89,10 @@ function week() {
                     classTime(__i, __minMax, _table);
                 }
                 else if (time > _min && time < _max ) {
-                    _table.getElementsByTagName('td')[__i - 1].classList.add('this-class');
-                    _table.getElementsByTagName('td')[__i].classList.add('this-class');
-                    _table.getElementsByTagName('td')[__i + 1].classList.add('this-class');
+                    searchClass(_table);
+                    // _table.getElementsByTagName('td')[__i - 1].classList.add('this-class');
+                    // _table.getElementsByTagName('td')[__i].classList.add('this-class');
+                    // _table.getElementsByTagName('td')[__i + 1].classList.add('this-class');
                 }
             }
         }
@@ -102,10 +103,11 @@ function week() {
     //В Четверг пар нет, значит смотрит следующий, Пятница. Пары есть, значит рисует.
     function wClass(i, _table) {
         let _i = i - 3;
+        console.log(i);
+        // if()
         for (i; i > _i; i--) {
             _table.querySelectorAll('tr:not(.space) td')[i+3].classList.add('last-class');
         }
-        
         _table.querySelectorAll('tr[class]:not(.space)')[day_of_week].classList.add('last-class');
     }
 
@@ -126,16 +128,23 @@ function week() {
                     time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds());
                     
                     if (time > min && time < max) {
-                        if(_table.querySelectorAll('td')[i].innerHTML === "&nbsp;")
+                        if(_table.querySelectorAll('td')[i].innerHTML === "&nbsp;"){
                             _table.querySelectorAll('tr[class]:not(.space)')[day_of_week - 1].classList.add('this-class');
+                        }
                         else
                         {
                             searchClass(_table);
                         }
                     }
                     else if (time > min && time > max) {
-                        if(_table.querySelectorAll('td')[_i].innerHTML !== "&nbsp;")
+                        if(_table.querySelectorAll('td')[_i].innerHTML !== "&nbsp;"){
                             classTime(_i, _minMax, _table);
+                        }
+                        else
+                        {
+                            searchClass(_table);
+                        }
+                            
                     }
                     else if (time > lastClass || time < firstClass) {
                         if (day_of_week > 4) {
@@ -153,16 +162,41 @@ function week() {
     }
 
     function searchClass(__table){
+        let currDay, currIndex;
         for (var i = 0; i < __table.querySelectorAll('tr:not(.space)>td').length; i++) {
+            if(__table.querySelectorAll('tr:not(.space) :not(th)')[i].innerText === __table.querySelectorAll('tr[class]:not(.space)')[day_of_week-1].getElementsByTagName('td')[0].innerText){
+                currIndex = i;
+                //39
+            }
+            else 
+            {
+                continue;
+            }
             for(var j = 0; j < 5; j++){
-                let thisDay = __table.querySelectorAll('tr[class]:not(.space)')[day_of_week].getElementsByTagName('td')[0];
-                if(__table.querySelectorAll('tr:not(.space) td')[i] === thisDay && __table.querySelectorAll('tr:not(.space)>td:last-child')[j].innerHTML === '&nbsp;'){
-                    wClass(i, __table);
+                let thisDay = __table.querySelectorAll('tr[class]:not(.space)')[day_of_week-1].getElementsByTagName('td')[0];
+                if(__table.querySelectorAll('tr:not(.space) td')[i] === thisDay && __table.querySelectorAll('tr:not(.space)>td:last-child')[j].innerHTML !== '&nbsp;'){
+                    if(__table.querySelectorAll('tr:not(.space) :not(th)')[currIndex+(j+3)].innerHTML === "&nbsp;" && j < 4){
+                        searchClass(__table);
+                    }
+                    else
+                    {
+                        wClass(i+j*3, __table);
+                    }
                 }
-                else continue;
+                else
+                {
+                    continue;
+                }
             }
         }
     }
 
 /*=================================================================================================================*/
 }
+
+//for testing
+// var oddTable = document.getElementById('odd-table');
+// var evenTable = document.getElementById('even-table');
+// evenTable.querySelectorAll('tr[class]:not(.space)')[4]
+// evenTable.querySelectorAll('tr:not(.space) :not(th)')[39+(0*3)]
+// evenTable.querySelectorAll('tr:not(.space) td')[39+3*3]
