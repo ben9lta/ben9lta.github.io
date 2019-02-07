@@ -17,7 +17,7 @@ function week() {
     tdNbsp(evenTable);
 
     var day_of_week = new Date().getDay();
-    if(day_of_week > 4) day_of_week = 0;
+    if(day_of_week > 5) day_of_week = 1;
     // var evenTr = evenTable.querySelectorAll(['tr[class]:not(.space)']);
     // var oddTr = oddTable.querySelectorAll(['tr[class]:not(.space)']);
     var time = new Date();
@@ -54,8 +54,8 @@ function week() {
     //Функция стилизирует недели, четная или нечетная определенным цветом
     //Дополнение к Основной функции
     function oddEven(_table, _table2){
-        var evenTr = _table.querySelectorAll(['tr[class]:not(.space)']);
-        var oddTr = _table2.querySelectorAll(['tr[class]:not(.space)']);
+        var _Tr = _table.querySelectorAll(['tr[class]:not(.space)']);
+        var _Tr2 = _table2.querySelectorAll(['tr[class]:not(.space)']);
 
         _table.getElementsByTagName('h2')[0].style.color = 'green';
         _table.getElementsByTagName('h2')[0].style.textDecoration = 'underline';
@@ -64,8 +64,9 @@ function week() {
 
         //Выделяет День недели
         _table.querySelectorAll('tr[class]:not(.space)')[day_of_week - 1];
-        evenTr[day_of_week - 1].getElementsByTagName('td')[0].classList.add('this-class');
-        oddTr[day_of_week - 1].getElementsByTagName('td')[0].classList.remove('this-class');
+
+        _Tr[day_of_week - 1].getElementsByTagName('td')[0].classList.add('this-class');
+        // _Tr2[day_of_week - 1].getElementsByTagName('td')[0].classList.remove('this-class');
     }
 
     //Функция ищет текущий день и пару по времени, если пара найдена на текущее время, значит красит ее в зеленый цвет.
@@ -107,10 +108,23 @@ function week() {
     //В Четверг пар нет, значит смотрит следующий, Пятница. Пары есть, значит рисует.
     function wClass(i, _table) {
         let _i = i - 3;
-        for (i; i > _i; i--) {
-            _table.querySelectorAll('tr:not(.space) td')[i+3].classList.add('last-class');
+        // if(i >= 52){
+        //     if(_table == evenTable){
+        //         wClass(0, oddTable);
+        //     }else if(_table == oddTable){
+        //         wClass(0, evenTable);
+        //     }
+        // }
+        if(_table.querySelectorAll('tr:not(.space) td')[i+3].innerHTML !== "&nbsp;"){
+            for (i; i > _i; i--) {
+                _table.querySelectorAll('tr:not(.space) td')[i+3].classList.add('last-class');
+            }
         }
-        _table.querySelectorAll('tr[class]:not(.space)')[day_of_week].classList.add('last-class');
+        else 
+        {
+            _table.querySelectorAll('tr[class]:not(.space)')[day_of_week-1].classList.add('last-class');
+        }
+        
     }
 
     //Основная функция, которая по времени определяет какая пара, есть ли она и тд.
@@ -140,17 +154,15 @@ function week() {
                     }
                     else if (time > min && time > max) {
                         if(_table.querySelectorAll('td')[_i].innerHTML !== "&nbsp;"){
-                            //console.log('test');
                             classTime(_i, _minMax, _table);
                         }
                         else
                         {
                             searchClass(_table);
                         }
-                            
                     }
                     else if (time > lastClass || time < firstClass) {
-                        if (day_of_week > 4) {
+                        if (day_of_week > 5) {
                             _table2.querySelectorAll('tr[class]:not(.space)')[0].classList.add('last-class');
                         }
                         if(time > lastClass)
@@ -183,7 +195,8 @@ function week() {
                     }
                     else
                     {
-                        wClass(i+j*3, __table);
+                        //wClass(i+j*3, __table);
+                        wClass(i, __table);
                     }
                 }
                 else
