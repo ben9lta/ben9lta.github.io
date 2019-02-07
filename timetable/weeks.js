@@ -78,7 +78,7 @@ function week() {
         if (__table === undefined || __table == '') {
             console.error(_table);
         } else {
-            _minMax = _table.getElementsByTagName('td')[__i].innerText;
+            _minMax = _table.getElementsByTagName('td')[i].innerText;
             __minMax = _minMax;
             if (_minMax.length !== 0 || _minMax != '') {
                 _minMax = _minMax.split(' - ');
@@ -93,16 +93,9 @@ function week() {
                             searchClass(_table);
                         }
                     }
-                    // else
-                    // {
-                    //     searchClass(_table);
-                    // }
                 }
                 else if (time > _min && time < _max ) {
                     searchClass(_table);
-                    // _table.getElementsByTagName('td')[__i - 1].classList.add('this-class');
-                    // _table.getElementsByTagName('td')[__i].classList.add('this-class');
-                    // _table.getElementsByTagName('td')[__i + 1].classList.add('this-class');
                 }
             }
         }
@@ -113,8 +106,6 @@ function week() {
     //В Четверг пар нет, значит смотрит следующий, Пятница. Пары есть, значит рисует.
     function wClass(i, _table) {
         let _i = i - 3;
-        console.log(i);
-        // if()
         for (i; i > _i; i--) {
             _table.querySelectorAll('tr:not(.space) td')[i+3].classList.add('last-class');
         }
