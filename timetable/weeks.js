@@ -86,7 +86,17 @@ function week() {
                 _max.setHours(_minMax[1].split(':')[0], _minMax[1].split(':')[1], 0);
                 time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds());
                 if (time > _min && time > _max) {
-                    classTime(__i, __minMax, _table);
+                    // classTime(__i, __minMax, _table);
+                    if(_table.querySelectorAll('td')[__i].innerHTML !== "&nbsp;"){
+                        classTime(__i, _minMax, _table);
+                        if(time > _max){
+                            searchClass(_table);
+                        }
+                    }
+                    // else
+                    // {
+                    //     searchClass(_table);
+                    // }
                 }
                 else if (time > _min && time < _max ) {
                     searchClass(_table);
@@ -138,6 +148,7 @@ function week() {
                     }
                     else if (time > min && time > max) {
                         if(_table.querySelectorAll('td')[_i].innerHTML !== "&nbsp;"){
+                            //console.log('test');
                             classTime(_i, _minMax, _table);
                         }
                         else
