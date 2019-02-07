@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.Bondar page</title>
+    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="style/fonts.css">
+    <link rel="stylesheet" href="style/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> -->
+
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="logo" id="header-logo">
+            <img src="img/logo.png" alt="logo">
+        </div>
+        <div class="menu">
+            <div class="menu__mobile">
+                <input id="hamburger" class="hamburger" type="checkbox" />
+                <label class="hamburger" for="hamburger">
+                    <i></i>
+                    <text>
+                        <close>закрыть</close>
+                        <open>Меню</open>
+                    </text>
+                </label>
+                <section class="drawer-list">
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Работы</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </section>
+            </div>
+
+            <ul class="row menu__pc">
+                <li class="col-3"><a href="#">Главная</a></li>
+                <li class="col-3"><a href="#">Работы</a></li>
+                <li class="col-3"><a href="#">Контакты</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="about">
+            <div class="about__title">
+                <h1>Обо мне</h1>
+            </div>
+
+            <div class="row about__info">
+                <div class="col-md-4 col-sm-12 col-lg-4 about__left">
+                    <img src="img/ya-480.jpg" alt="Me">
+                    <span>Александр Бондарь</span>
+                </div>
+                <div class="col-md-8 col-sm-12 col-lg-8 about__right">
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde voluptatem expedita, quam
+                        voluptates tempore inventore obcaecati nulla quisquam, quos quo tempora rerum at nihil harum
+                        nostrum delectus quaerat veniam. Impedit.</p>
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde voluptatem expedita, quam
+                        voluptates tempore inventore obcaecati nulla quisquam, quos quo tempora rerum at nihil harum
+                        nostrum delectus quaerat veniam. Impedit.</p>
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde voluptatem expedita, quam
+                        voluptates tempore inventore obcaecati nulla quisquam, quos quo tempora rerum at nihil harum
+                        nostrum delectus quaerat veniam. Impedit.</p>
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Unde voluptatem expedita, quam
+                        voluptates tempore inventore obcaecati nulla quisquam, quos quo tempora rerum at nihil harum
+                        nostrum delectus quaerat veniam. Impedit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="work row justify-content-md-center">
+        <div class="work__title col-md-12 col-12">
+            <h1>Мои работы</h1>
+        </div>
+        <div class="col-md-3 col-sm-6 col-lg-3 work__items">
+            <a href="timetable/index.html"><img src="img/img2-320.jpg" alt="Расписание"><br> <span>Расписание</span> </a>
+        </div>
+        <div class="col-md-3 col-sm-6 col-lg-3 work__items">
+            <a href="travel/index.html"><img src="img/img-320.jpg" alt="Путешествие"><br> <span>Путешествие</span></a>
+        </div>
+
+    </div>
+
+    <div class="contact container justify-content-md-center">
+        <div class="contact__title col-md-12 col-12">
+            <h1>Мои контакты</h1>
+        </div>
+
+        <div class="contact__form">
+            <form>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Имя">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Фамилия">
+                    </div>
+                </div>
+                <div class="form-group contact__form-email">
+                    <label for="email">Email адрес</label>
+                    <input type="email" class="form-control" id="email" placeholder="name@example.com">
+                </div>
+            </form>
+            <div class="form-group contact__form-message">
+                <label for="message">Сообщение: </label>
+                <textarea class="form-control contact__form-textarea" id="message" rows="5" placeholder="Напишите, что Вас интересует..."></textarea>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm contact__button">Отправить</button>
+        </div>
+
+
+    </div>
+
+    <footer>
+        <div class="footer__info-top">
+            <ul>
+                <li><a href=""><span class="vk icons8-vk"></span></a></li>
+                <li><a href=""><span class="fb icons8-facebook"></span></a></li>
+                <li><a href=""><span class="gp icons8-google-plus"></span></a></li>
+                <li><a href=""><span class="tw icons8-twitter"></span></a></li>
+            </ul>
+        </div>
+        <div class="footer__info-bottom">
+            <p class="footer-rights">© S. Bondar, 2019. All Rights Reserved</p>
+        </div>
+
+    </footer>
+    <script src="js/query-3.2.1.slim.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/popper.min.js"></script>
+
+
+</body>
+
+</html>
