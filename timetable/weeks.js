@@ -60,14 +60,14 @@ function week() {
             //Пример: 13:51 > 13:20 && 13:51 < 14:50
             if (arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] < arrayMinMax[i][1]) {
                 //Красим зеленым
-                console.log('Идет урок');
+                //console.log('Идет урок');
                 gClass(table, thisDay[i])
             }
             //Если текущее время > начала пары и > конца пары, т.е. перемена
             //Пример: 14:51 > 13:20 && 14:51 > 14:50
             else if (arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] > arrayMinMax[i][1] && arrayMinMax[i][2] < endClass) {
                 //проверяем, есть ли следующая пара
-                console.log('Перемена');
+                // console.log('Перемена');
                 wClass(table, thisDay[i]);
                 //Если пара нашлась, прекращаем проходить по циклу.
                 break;
@@ -78,15 +78,15 @@ function week() {
                 //Если пары еще не начались
                 if (arrayMinMax[i][2] < startClass) {
                     //То проверяем, есть ли пары в этот день
-                    console.log('Пар еще небыло');
+                    // console.log('Пар еще небыло');
                 }
                 //Если пары закончились
                 else if (arrayMinMax[i][2] > endClass) {
-                    console.log('Пары закончились');
+                    // console.log('Пары закончились');
                     //То проверяем какой сегодня день недели
                     //Если сегодня пятница, то меняем таблицу => неделю, и день недели меняем на Пн
                     if (day_of_week == 5) {
-                        console.log('Пятница')
+                        // console.log('Пятница')
                         table = changeWeek(table);//замена таблиц
                         day_of_week = 1;
                         let nextWeek = searchWeekClass(table)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
@@ -94,7 +94,7 @@ function week() {
                     }
                     //Если другой день недели, т.е. !=5 (не Пт)
                     else {
-                        console.log('Другой день недели')
+                        // console.log('Другой день недели')
                         searchWeekClass(table, day_of_week - 1);
                     }
                 }
