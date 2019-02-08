@@ -52,6 +52,8 @@ function week() {
         endClass.setHours(20, 0, 0);//Время окончания последней пары
         startClass.setHours(13, 20, 0);//Время начала первой пары
         // console.log(day_of_week);
+        //Если день недели = пятница, после учебы, суббота или воскресенье, то идем на следующую неделю
+        //Если будние дни, то получаем список времени пар
         if (weekend(table)) {
             //Поулчаем список времени пар
             var arrayMinMax = timeClass(table)[0];//Начало пары, конец, текущее время, строка времени.
@@ -103,52 +105,6 @@ function week() {
                 }
             }
         }
-        // for (var i = 0; i < arrayMinMax.length; i++) {
-        //     //Если текущее время > начала пары и < конца пары, т.е. идет пара
-        //     //Пример: 13:51 > 13:20 && 13:51 < 14:50
-        //     if (arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] < arrayMinMax[i][1]) {
-        //         //Красим зеленым
-        //         //console.log('Идет урок');
-        //         gClass(table, thisDay[i])
-        //     }
-        //     //Если текущее время > начала пары и > конца пары, т.е. перемена
-        //     //Пример: 14:51 > 13:20 && 14:51 > 14:50
-        //     else if (arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] > arrayMinMax[i][1] && arrayMinMax[i][2] < endClass) {
-        //         //проверяем, есть ли следующая пара
-        //         // console.log('Перемена');
-        //         wClass(table, thisDay[i]);
-        //         //Если пара нашлась, прекращаем проходить по циклу.
-        //         break;
-        //     }
-        //     //Если пары закончились или не начались. 
-        //     //Пример: 20:00 > 19:51 || 12:00 < 13:20
-        //     else if (arrayMinMax[i][2] > endClass || arrayMinMax[i][2] < startClass) {
-        //         //Если пары еще не начались
-        //         if (arrayMinMax[i][2] < startClass) {
-        //             //То проверяем, есть ли пары в этот день
-        //             //console.log('Пар еще небыло');
-        //         }
-        //         //Если пары закончились
-        //         else if (arrayMinMax[i][2] > endClass) {
-        //             //console.log('Пары закончились');
-        //             //То проверяем какой сегодня день недели
-        //             //Если сегодня пятница, то меняем таблицу => неделю, и день недели меняем на Пн
-        //             if (day_of_week == 5) {
-        //                 // console.log('Пятница')
-        //                 table = changeWeek(table);//замена таблиц
-        //                 day_of_week = 1;
-        //                 let nextWeek = searchWeekClass(table)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
-        //                 wClass(table, nextWeek);
-        //             }
-        //             //Если другой день недели, т.е. !=5 (не Пт)
-        //             else {
-        //                 // console.log('Другой день недели')
-        //                 searchWeekClass(table, day_of_week - 1);
-        //             }
-        //         }
-        //     }
-        // }
-
         //minMax = arrayTime[i].innerText//Строка времени n-ой пары
     }
     //=================================================================================================//
@@ -271,12 +227,13 @@ function week() {
             table = changeWeek(table);//замена таблиц
             day_of_week = 1;
             let nextWeek = searchWeekClass(table)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
-            wClass(table, nextWeek);
-            return false;
+            wClass(table, nextWeek);//выделяем желтым цветом строку и день пары, которая будет
+            return false;//
         }
         //Если другой день недели, т.е. !=5 (не Пт)
         else {
             // console.log('Другой день недели')
+            //Ищем следующую пару в будни
             searchWeekClass(table, day_of_week - 1);
             return true;
         }
