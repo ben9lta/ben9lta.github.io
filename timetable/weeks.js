@@ -1,10 +1,10 @@
-// var evenWeek;//Четный
-// var oddWeek;//Нечетный
 document.addEventListener('DOMContentLoaded', week);
 function week() {
-    var oddTable = document.getElementById('odd-table');
-    var evenTable = document.getElementById('even-table');
+    var oddTable = document.getElementById('odd-table');//Нечетная
+    var evenTable = document.getElementById('even-table');//Четная
 
+    //=================================================================================================//
+    //Функция добавления пробелов
     function tdNbsp(table) {
         for (var i = 0; i < table.getElementsByTagName('td').length; i++) {
             if (table.getElementsByTagName('td')[i].innerText === '') {
@@ -16,15 +16,14 @@ function week() {
     tdNbsp(oddTable);
     tdNbsp(evenTable);
 
-    var day_of_week = new Date().getDay();
-    if(day_of_week > 5) day_of_week = 1;
-    // var evenTr = evenTable.querySelectorAll(['tr[class]:not(.space)']);
-    // var oddTr = oddTable.querySelectorAll(['tr[class]:not(.space)']);
-    var time = new Date();
-    var min = new Date(), max = new Date();
-    var minMax;
+    var day_of_week = new Date().getDay();//День недели
+    if (day_of_week > 5) day_of_week = 1;//Если суббота - то день недели будет ПН
 
-    var lastClass = new Date();//"Последняя" пары
+    var time = new Date();//Текущее время
+    var min = new Date(), max = new Date();//Начало пары, конец пары
+    var minMax;//Строка начала и конца пары
+
+    var lastClass = new Date();//"Последняя" пара
     var firstClass = new Date();//"Первая" пара
     lastClass.setHours(20, 0, 0);//Время окончания последней пары
     firstClass.setHours(13, 20, 0);//Время начала первой пары
@@ -33,186 +32,193 @@ function week() {
     var month = new Date().getMonth();  //Месяц
     var today = new Date(year, month, 0).getTime();// Год месяц 0 (-1 день от текущего месяца) в миллисекундах
     var now = new Date().getTime(); //Сегодняшние год месяц день в миллисекундах
-    var week = Math.round((now - today) / (1000 * 60 * 60 * 24 * 7)); //(Сегодняшняя дата - начальная неделя) / неделю в миллисекундах = номер недели
+    var week = Math.round((now - today) / (1000 * 60 * 60 * 24 * 7)); //(Сегодняшняя дата - начальная неделя) / неделю в миллисекундах = номер недели (чет/нечет)
     if (week % 2) {
         //even - четная неделя
-        oddEven(evenTable, oddTable);
-        document.getElementsByTagName('main')[0].style = "flex-direction: column-reverse;";
-
-        f(evenTable, oddTable);
-    } else {
+        //document.getElementsByTagName('main')[0].style = "flex-direction: column-reverse;";//Если четная, то нечетную меняем местами с четной
+        checkTime(evenTable);
+    }
+    else {
         //odd - нечетная неделя
-        oddEven(oddTable, evenTable);
-        document.getElementsByTagName('main')[0].style = "flex-direction: column;";
+        //document.getElementsByTagName('main')[0].style = "flex-direction: column;";//Если нечетная, то меняем местами с четной
+        checkTime(oddTable);
 
-        f(oddTable, evenTable);
     }
-
-    /*--------------------------------------------------------------------------------------------------------------*/
-    //Функции
-    
-    //Функция стилизирует недели, четная или нечетная определенным цветом
-    //Дополнение к Основной функции
-    function oddEven(_table, _table2){
-        var _Tr = _table.querySelectorAll(['tr[class]:not(.space)']);
-        var _Tr2 = _table2.querySelectorAll(['tr[class]:not(.space)']);
-
-        _table.getElementsByTagName('h2')[0].style.color = 'green';
-        _table.getElementsByTagName('h2')[0].style.textDecoration = 'underline';
-        _table2.getElementsByTagName('h2')[0].style.color = 'red';
-        _table2.getElementsByTagName('h2')[0].style.textDecoration = 'none';
-
-        //Выделяет День недели
-        _table.querySelectorAll('tr[class]:not(.space)')[day_of_week - 1];
-
-        _Tr[day_of_week - 1].getElementsByTagName('td')[0].classList.add('this-class');
-        // _Tr2[day_of_week - 1].getElementsByTagName('td')[0].classList.remove('this-class');
-    }
-
-    //Функция ищет текущий день и пару по времени, если пара найдена на текущее время, значит красит ее в зеленый цвет.
-    //Дополнение к Основной функции
-    function classTime(i, _minMax, _table) {
-        var __i = i + 3;
-        var _min = new Date(), _max = new Date();
-        var __minMax;
-        var __table = _table;
-        if (__table === undefined || __table == '') {
-            console.error(_table);
-        } else {
-            //ttt
-            _minMax = _table.getElementsByTagName('td')[i].innerText;
-            __minMax = _minMax;
-            if (_minMax.length !== 0 || _minMax != '') {
-                _minMax = _minMax.split(' - ');
-                _min.setHours(_minMax[0].split(':')[0], _minMax[0].split(':')[1], 0);
-                _max.setHours(_minMax[1].split(':')[0], _minMax[1].split(':')[1], 0);
-                time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds());
-                if (time > _min && time > _max) {
-                    // classTime(__i, __minMax, _table);
-                    if(_table.querySelectorAll('td')[__i].innerHTML !== "&nbsp;"){
-                        classTime(__i, _minMax, _table);
-                        if(time > _max){
-                            searchClass(_table);
-                        }
-                    }
+    //=================================================================================================//
+    //Проверка времени
+    function checkTime(table) {
+        var endClass = new Date();//последнияя пара
+        var startClass = new Date();//первая пара
+        endClass.setHours(20, 0, 0);//Время окончания последней пары
+        startClass.setHours(13, 20, 0);//Время начала первой пары
+        //Поулчаем список времени пар
+        var arrayMinMax = timeClass(table)[0];//Начало пары, конец, текущее время, строка времени.
+        var thisDay = timeClass(table)[1];//объект, строка tr в таблицы таблицы (пара)
+        //Проходимся по всем парам (4)
+        for (var i = 0; i < arrayMinMax.length; i++) {
+            //Если текущее время > начала пары и < конца пары, т.е. идет пара
+            //Пример: 13:51 > 13:20 && 13:51 < 14:50
+            if (arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] < arrayMinMax[i][1]) {
+                //Красим зеленым
+                console.log('Идет урок');
+                gClass(table, thisDay[i])
+            }
+            //Если текущее время > начала пары и > конца пары, т.е. перемена
+            //Пример: 14:51 > 13:20 && 14:51 > 14:50
+            else if (arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] > arrayMinMax[i][1] && arrayMinMax[i][2] < endClass) {
+                //проверяем, есть ли следующая пара
+                console.log('Перемена');
+                wClass(table, thisDay[i]);
+                //Если пара нашлась, прекращаем проходить по циклу.
+                break;
+            }
+            //Если пары закончились или не начались. 
+            //Пример: 20:00 > 19:51 || 12:00 < 13:20
+            else if (arrayMinMax[i][2] > endClass || arrayMinMax[i][2] < startClass) {
+                //Если пары еще не начались
+                if (arrayMinMax[i][2] < startClass) {
+                    //То проверяем, есть ли пары в этот день
+                    console.log('Пар еще небыло');
                 }
-                else if (time > _min && time < _max ) {
-                    searchClass(_table);
+                //Если пары закончились
+                else if (arrayMinMax[i][2] > endClass) {
+                    console.log('Пары закончились');
+                    //То проверяем какой сегодня день недели
+                    //Если сегодня пятница, то меняем таблицу => неделю, и день недели меняем на Пн
+                    if (day_of_week == 5) {
+                        console.log('Пятница')
+                        table = changeWeek(table);//замена таблиц
+                        day_of_week = 1;
+                        let nextWeek = searchWeekClass(table)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
+                        wClass(table, nextWeek);
+                    }
+                    //Если другой день недели, т.е. !=5 (не Пт)
+                    else {
+                        console.log('Другой день недели')
+                        searchWeekClass(table, day_of_week - 1);
+                    }
                 }
             }
         }
+
+        //minMax = arrayTime[i].innerText//Строка времени n-ой пары
     }
-    
-    //Функция рисует желтым цветом бэкграунд у следующего дня, где есть пары - если в этот день нет пар. 
-    //Дополнение к Основной функции
-    //В Четверг пар нет, значит смотрит следующий, Пятница. Пары есть, значит рисует.
-    function wClass(i, _table) {
-        let _i = i - 3;
-        // if(i >= 52){
-        //     if(_table == evenTable){
-        //         wClass(0, oddTable);
-        //     }else if(_table == oddTable){
-        //         wClass(0, evenTable);
-        //     }
-        // }
-        if(_table.querySelectorAll('tr:not(.space) td')[i+3].innerHTML !== "&nbsp;"){
-            for (i; i > _i; i--) {
-                _table.querySelectorAll('tr:not(.space) td')[i+3].classList.add('last-class');
+    //=================================================================================================//
+    //Функция возврата начала, конца пары и текущего времени.
+    function timeClass(table) {
+        var currDay = table.querySelectorAll('tr[class]:not(.space)')[(day_of_week - 1) * 4].getElementsByTagName('td')[0];//Ячейка текущего дня недели
+        var _className = table.querySelectorAll('tr[class]:not(.space)')[4 * day_of_week - 1].className.substr(0, 3);//Имя класса ячейки текущего дня недели
+        var thisDay = table.querySelectorAll('tr[class^=' + _className + ']');//список строк таблицы текущего дня недели (список пар от 4-7)
+        var arrayTime = [];//Массив времени начала и конца каждой пары текущего дня
+        var arrayMinMax = [];//Двумерный массив каждой строки времени n-ой пары
+
+        currDay.classList.add('this-class');//Текущий день помечаем зеленым
+
+        for (var i = 0; i < thisDay.length; i++) {
+            arrayTime[i] = thisDay[i].querySelectorAll('td:nth-last-child(2)')[0];//Время каждой пары
+            arrayMinMax[i] = splitTime(arrayTime[i].innerText);
+            //arrayMinMax[a][b]. a - список элемента массива. b[0-3] - _min, _max, _time, _minMax
+        }
+
+        return [arrayMinMax, thisDay];
+    }
+    //=================================================================================================//
+    //Разделенеи времени на начало и конец пары
+    function splitTime(_minMax) {
+        _minMax = _minMax.split(' - ');//Разделяем строку по символу ' - '
+        let _min = new Date(), _max = new Date(), _time = new Date();//_min - начало пары, _max - конец пары, _time - текущее время
+        _min.setHours(_minMax[0].split(':')[0], _minMax[0].split(':')[1], 0);//Разделяем строку времени пары на время начала пары
+        _max.setHours(_minMax[1].split(':')[0], _minMax[1].split(':')[1], 0);//Разделяем строку времени пары на время конца пары
+        _time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds());//Задаем текущее время
+        // console.log(_time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds()))
+        return [_min, _max, _time, _minMax.join(' - ')];//Возвращаем начало пары, конец пары, текущее время и строку времени пары
+    }
+    //=================================================================================================//
+    //Поиск следующей пары текущего дня
+    function searchClass(table, k = 0) {
+        var _className = table.querySelectorAll('tr[class]:not(.space)')[day_of_week - 1].className.substr(0, 3);//Если стоит два или больше класса, делаем подстроку из 3 символов
+        var thisDay = table.querySelectorAll('tr[class^=' + _className + ']');//список строк таблицы текущего дня недели (список пар от 4-7)
+        var arrayInfo = [];//Массив наименования пар
+        var arrayMinMax = [];//Двумерный массив каждой строки времени n-ой пары
+
+
+        for (var i = k; i < thisDay.length; i++) {
+            arrayInfo[i] = thisDay[i].querySelectorAll('td:nth-last-child(1)')[0];//Наименование пары
+            arrayMinMax[i] = splitTime(arrayTime[i].innerText);
+            //arrayMinMax[a][b]. a - список элемента массива. b[0-3] - _min, _max, _time, _minMax
+        }
+        //Если пар нет, отправляем false
+        if (thisDay[k].querySelectorAll('td:nth-last-child(1)')[0].innerHTML === "&nbsp;") {
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }
+    //=================================================================================================//
+    //Если пара идет
+    function gClass(table, _thisDay) {
+        _thisDay.classList.add('this-class');
+    }
+    //=================================================================================================//
+    //Если пары не идет (перемена/закончились пары/еще не начинались)
+    function wClass(table, _thisDay) {
+        //Если _thisDay массив, то закрашиваем строку + день
+        if (_thisDay.length > 1) {
+            for (var i = 0; i < _thisDay.length; i++) {
+                for (var j = 0; j < _thisDay[i].length; j++){
+                    _thisDay[i][j].classList.add('last-class');
+                }
             }
         }
         else 
         {
-            _table.querySelectorAll('tr[class]:not(.space)')[day_of_week-1].classList.add('last-class');
+            _thisDay.classList.add('last-class');
         }
-        
-    }
 
-    //Основная функция, которая по времени определяет какая пара, есть ли она и тд.
-    function f(_table, _table2){
-        for (var i = 0; i < _table.getElementsByTagName('td').length; i++) {
-            if (_table.getElementsByTagName('td')[i].className !== 'this-class') {
+
+
+    }
+    //=================================================================================================//
+    //Функция смены недели
+    function changeWeek(table) {
+        //Если таблица четная - меняем ее на нечетную
+        if (table === oddTable) {
+            table = evenTable;
+            document.getElementsByTagName('main')[0].style = "flex-direction: column-reverse;";//Если четная, то нечетную меняем местами с четной
+        }
+        //Если таблица нечетная - меняем на четную
+        else {
+            table = oddTable;
+            document.getElementsByTagName('main')[0].style = "flex-direction: column;";//Если четная, то нечетную меняем местами с четной
+        }
+        return table;
+    }
+    //=================================================================================================//
+    //Поиск пар по каждому дню
+    function searchWeekClass(table, k = 0) {
+        let size = table.querySelectorAll('tr[class]:not(.space)').length;//Количество всех пар, имеющихся и неимеющихся.
+        for (var i = k * 4; i < size; i++) {
+            //Если пары нет, то идем к следующей
+            if (table.querySelectorAll('tr[class]:not(.space)')[i].querySelectorAll('td:last-child')[0].innerHTML === "&nbsp;") {
                 continue;
             }
-            else if (_table.getElementsByTagName('td')[i].className === 'this-class') {
-                var _i = i + 2;
-                minMax = _table.getElementsByTagName('td')[_i].innerText;
-                var _minMax = minMax;
-                if (minMax.length !== 0 || minMax != '') {
-                    minMax = minMax.split(' - ');
-                    min.setHours(minMax[0].split(':')[0], minMax[0].split(':')[1], 0);
-                    max.setHours(minMax[1].split(':')[0], minMax[1].split(':')[1], 0);
-                    time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds());
-                    
-                    if (time > min && time < max) {
-                        if(_table.querySelectorAll('td')[i].innerHTML === "&nbsp;"){
-                            _table.querySelectorAll('tr[class]:not(.space)')[day_of_week - 1].classList.add('this-class');
-                        }
-                        else
-                        {
-                            searchClass(_table);
-                        }
-                    }
-                    else if (time > min && time > max) {
-                        if(_table.querySelectorAll('td')[_i].innerHTML !== "&nbsp;"){
-                            classTime(_i, _minMax, _table);
-                        }
-                        else
-                        {
-                            searchClass(_table);
-                        }
-                    }
-                    else if (time > lastClass || time < firstClass) {
-                        if (day_of_week > 5) {
-                            _table2.querySelectorAll('tr[class]:not(.space)')[0].classList.add('last-class');
-                        }
-                        if(time > lastClass)
-                            _table.querySelectorAll('tr[class]:not(.space)')[day_of_week].classList.add('last-class');
-                            
-                        searchClass(_table);
-                    }
-                }
-                break;
+            else {
+                // console.log(i);
+                let _className = table.querySelectorAll('tr[class]:not(.space)')[i].className.substr(0, 3);//Имя класса ячейки следующего дня недели, где есть пары
+                let thisDay = [table.querySelectorAll('tr[class^=' + _className + ']')[0].getElementsByTagName('td')[0]];//Ячейка дня, где есть пары
+                let row = table.querySelectorAll('tr[class]:not(.space)')[i].querySelectorAll('td:nth-last-child(n)');//Строка дня
+                let both = [row, thisDay];
+                return [i, both];//a,b. [a] - индекс пары из всей недели.  [b] - День, когда будут пары
+                //[b] = table.querySelectorAll('tr[class]:not(.space)')[i].querySelectorAll('td:last-child')[0]
+                //[b] - объект (строка) с найденной парой
             }
         }
     }
+    //=================================================================================================//
+    //
 
-    function searchClass(__table){
-        let currDay, currIndex;
-        for (var i = 0; i < __table.querySelectorAll('tr:not(.space)>td').length; i++) {
-            if(__table.querySelectorAll('tr:not(.space) :not(th)')[i].innerText === __table.querySelectorAll('tr[class]:not(.space)')[day_of_week-1].getElementsByTagName('td')[0].innerText){
-                currIndex = i;
-                //39
-            }
-            else 
-            {
-                continue;
-            }
-            for(var j = 0; j < 5; j++){
-                let thisDay = __table.querySelectorAll('tr[class]:not(.space)')[day_of_week-1].getElementsByTagName('td')[0];
-                if(__table.querySelectorAll('tr:not(.space) td')[i] === thisDay && __table.querySelectorAll('tr:not(.space)>td:last-child')[j].innerHTML !== '&nbsp;'){
-                    if(__table.querySelectorAll('tr:not(.space) :not(th)')[currIndex+(j+3)].innerHTML === "&nbsp;" && j < 4){
-                        searchClass(__table);
-                    }
-                    else
-                    {
-                        //wClass(i+j*3, __table);
-                        wClass(i, __table);
-                    }
-                }
-                else
-                {
-                    continue;
-                }
-            }
-        }
-    }
 
-/*=================================================================================================================*/
+
 }
-
-//for testing
-// var oddTable = document.getElementById('odd-table');
-// var evenTable = document.getElementById('even-table');
-// evenTable.querySelectorAll('tr[class]:not(.space)')[4]
-// evenTable.querySelectorAll('tr:not(.space) :not(th)')[39+(0*3)]
-// evenTable.querySelectorAll('tr:not(.space) td')[39+3*3]
