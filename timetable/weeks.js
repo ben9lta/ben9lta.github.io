@@ -222,7 +222,7 @@ function week() {
     //=================================================================================================//
     //Если пары закончились в Пт, Сб, Вс.
     function weekend(table) {
-        if (day_of_week >= 5) {
+        if (day_of_week >= 5 || day_of_week === 0) {
             // console.log('Пятница')
             table = changeWeek(table);//замена таблиц
             day_of_week = 1;
