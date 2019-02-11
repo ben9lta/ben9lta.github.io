@@ -26,8 +26,8 @@ function week() {
 
     var lastClass = new Date();//"Последняя" пара
     var firstClass = new Date();//"Первая" пара
-    lastClass.setHours(20, 0, 0);//Время окончания последней пары
-    firstClass.setHours(13, 20, 0);//Время начала первой пары
+    lastClass.setHours(20, 15, 0);//Время окончания последней пары
+    firstClass.setHours(13, 30, 0);//Время начала первой пары
 
     var year = new Date().getFullYear(); //Год
     var month = new Date().getMonth();  //Месяц
