@@ -126,7 +126,7 @@ function week() {
                         if (arrayMinMax[i][2] < startClass) {
                             //То проверяем, есть ли пары в этот день
                             //console.log('Пар еще небыло');
-                            let nextWeek = searchWeekClass(table, day_of_week)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
+                            let nextWeek = searchWeekClass(table, day_of_week-1)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
                             wClass(table, nextWeek);
                         }
                         //Если пары закончились
