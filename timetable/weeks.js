@@ -18,10 +18,10 @@ function week() {
     tdNbsp(evenTable);
 
     var day_of_week = new Date().getDay();//День недели
-    //if (day_of_week > 5) day_of_week = 1;//Если суббота - то день недели будет ПН
+    // day_of_week = 5;
 
     var time = new Date();//Текущее время
-    //time.setHours(18, 35, 50);
+    // time.setHours(18, 35, 50);
     var min = new Date(), max = new Date();//Начало пары, конец пары
     var minMax;//Строка начала и конца пары
 
@@ -68,10 +68,11 @@ function week() {
             var s = countClass(table);
             for (var i = s; i < arrayMinMax.length; i++) {
                 if (!searchClass(table)) {
-                    var next = searchWeekClass(table, i)[1];
+                    var next = searchWeekClass(table, day_of_week)[1];
                     wClass(table, next);
+                    break;
                     //changeWeek(table);
-                    //console.log('test');
+                    // console.log('test');
                 } else if (searchClass(table, s)) {
                     //Если время > начала пары и < начала следующей пары, т.е. Пара
                     //15:10 > 13:20 && 15:10 < 15:15
@@ -122,7 +123,7 @@ function week() {
                     //Пример: 20:00 > 19:51 || 12:00 < 13:20
                     else if (arrayMinMax[i][2] > endClass || arrayMinMax[i][2] < startClass) {
                         //Если пары еще не начались
-                        //console.log('123')
+                        // console.log('123')
                         if (arrayMinMax[i][2] < startClass) {
                             //То проверяем, есть ли пары в этот день
                             //console.log('Пар еще небыло');
@@ -192,7 +193,7 @@ function week() {
         _min.setHours(_minMax[0].split(':')[0], _minMax[0].split(':')[1], 0);//Разделяем строку времени пары на время начала пары
         _max.setHours(_minMax[1].split(':')[0], _minMax[1].split(':')[1], 0);//Разделяем строку времени пары на время конца пары
         _time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds());//Задаем текущее время
-        //_time.setHours(18, 35, 50);
+        // _time.setHours(18, 42, 50);
         // console.log(_time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds()))
         return [_min, _max, _time, _minMax.join(' - ')];//Возвращаем начало пары, конец пары, текущее время и строку времени пары
     }
