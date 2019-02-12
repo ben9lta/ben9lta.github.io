@@ -122,18 +122,12 @@ function week() {
                     //Пример: 20:00 > 19:51 || 12:00 < 13:20
                     else if (arrayMinMax[i][2] > endClass || arrayMinMax[i][2] < startClass) {
                         //Если пары еще не начались
-                        // console.log('123')
+                        //console.log('123')
                         if (arrayMinMax[i][2] < startClass) {
                             //То проверяем, есть ли пары в этот день
                             //console.log('Пар еще небыло');
-                            if (searchClass(table)) {
-                                let nextWeek = searchWeekClass(table)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
-                                wClass(table, nextWeek);
-                            }
-                            else {
-                                let nextWeek = searchWeekClass(table)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
-                                wClass(table, nextWeek);
-                            }
+                            let nextWeek = searchWeekClass(table, day_of_week)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
+                            wClass(table, nextWeek);
                         }
                         //Если пары закончились
                         else if (arrayMinMax[i][2] > endClass) {
