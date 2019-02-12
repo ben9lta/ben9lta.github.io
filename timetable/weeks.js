@@ -61,12 +61,12 @@ function week() {
             var thisDay = timeClass(table)[1];//объект, строка tr в таблицы таблицы (пара)
             //Проходимся по всем парам (4)
             for (var i = 0; i < arrayMinMax.length; i++) {
-                //Если текущее время > начала пары и < конца пары, т.е. идет пара
-                //Пример: 13:51 > 13:20 && 13:51 < 14:50
                 if (!searchClass(table)) {
                     var next = searchWeekClass(table)[1];
                     wClass(table, next);
                     //changeWeek(table);
+                    //Если текущее время > начала пары и < конца пары, т.е. идет пара
+                    //Пример: 13:51 > 13:20 && 13:51 < 14:50
                 } else if (searchClass(table)) {
                     if (arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] < arrayMinMax[i][1]) {
                         //Красим зеленым
@@ -156,7 +156,7 @@ function week() {
         var arrayInfo = [];//Массив наименования пар
         var arrayMinMax = [];//Двумерный массив каждой строки времени n-ой пары
         var arrayTime = [];
-
+        
 
         for (var i = k; i < thisDay.length; i++) {
             arrayInfo[i] = thisDay[i].querySelectorAll('td:nth-last-child(1)')[0];//Наименование пары
@@ -168,9 +168,10 @@ function week() {
         for (var i = 0; i < thisDay.length; i++) {
             if (thisDay[i].querySelectorAll('td:nth-last-child(1)')[0].innerHTML === "&nbsp;") {
                 if (i === thisDay.length - 1) { return false; }
+                else { return true; }
                 // searchWeekClass(table, 0);
                 // return false;
-                continue;
+                //continue;
             }
             else {
                 return true;
