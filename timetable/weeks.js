@@ -18,7 +18,7 @@ function week() {
     tdNbsp(evenTable);
 
     var day_of_week = new Date().getDay();//День недели
-    // day_of_week = 5;
+    // day_of_week = 1;
 
     var time = new Date();//Текущее время
     // time.setHours(18, 35, 50);
@@ -41,7 +41,7 @@ function week() {
         checkTime(evenTable);
         evenTable.getElementsByTagName('h2')[0].style = 'color: rgb(40, 197, 22); text-decoration: underline;';
         oddTable.getElementsByTagName('h2')[0].style = 'color: #efcc00;';
-        
+
     }
     else {
         //odd - нечетная неделя
@@ -67,38 +67,38 @@ function week() {
             //Проходимся по всем парам (4)
             var s = countClass(table);
             for (var i = s; i < arrayMinMax.length; i++) {
-                if (!searchClass(table)) {
+                if (!searchClass(table, s - 1)) {
                     var next = searchWeekClass(table, day_of_week)[1];
                     wClass(table, next);
                     break;
                     //changeWeek(table);
                     // console.log('test');
-                } else if (searchClass(table, s)) {
+                } else if (searchClass(table, s - 1)) {
                     //Если время > начала пары и < начала следующей пары, т.е. Пара
                     //15:10 > 13:20 && 15:10 < 15:15
                     // console.log('test');
                     if (i == 0 && arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] < arrayMinMax[i][1]) {
                         //Красим зеленым
-                        //console.log('Идет пара');
-                        if(searchClass(table,s)) {
+                        // console.log('Идет пара');
+                        if (searchClass(table, s)) {
                             gClass(table, thisDay[i]);
                             break;
                         } else {
                             let nextWeek = searchWeekClass(table, s);
-                            wClass(table, thisDay[i], nextWeek[1]);
+                            wClass(table, thisDay[i], nextWeek[i]);
                             break;
                         }
                         // wClass(table, thisDay[i-1]);
                         //break;
                     }
-                    else if (i > 0 && arrayMinMax[i][2] > arrayMinMax[i-1][0] && arrayMinMax[i][2] < arrayMinMax[i-1][1] && searchClass(table)) {
+                    else if (i > 0 && arrayMinMax[i][2] > arrayMinMax[i - 1][0] && arrayMinMax[i][2] < arrayMinMax[i - 1][1] && searchClass(table)) {
                         //console.log('Идет пара');
-                        if(checkClass(table, i-1)) {
-                            gClass(table, thisDay[i-1]);
+                        if (checkClass(table, i - 1)) {
+                            gClass(table, thisDay[i - 1]);
                             break;
                         } else {
-                            let nextWeek = searchWeekClass(table, i-1);
-                            wClass(table, thisDay[i], nextWeek[i-1]);
+                            let nextWeek = searchWeekClass(table, i - 1);
+                            wClass(table, thisDay[i], nextWeek[i - 1]);
                             break;
                         }
                     }
@@ -107,14 +107,22 @@ function week() {
                     else if (i == 0 && arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] > arrayMinMax[i][1] && arrayMinMax[i][2] < endClass) {
                         wClass(table, thisDay[i]);
                         //Если пара нашлась, прекращаем проходить по циклу.
-                        //console.log('123')
+                        // console.log('123')
                         break;
                     }
-                    else if (i > 0 && arrayMinMax[i][2] > arrayMinMax[i-1][0] && arrayMinMax[i][2] > arrayMinMax[i-1][1] && arrayMinMax[i][2] < endClass) {
+                    else if (i > 0 && arrayMinMax[i][2] > arrayMinMax[i - 1][0] && arrayMinMax[i][2] > arrayMinMax[i - 1][1] && arrayMinMax[i][2] < endClass) {
                         //проверяем, есть ли следующая пара
-                        //console.log('Перемена');
+                        // console.log('Перемена');
                         //console.log(thisDay[i])
-                        wClass(table, thisDay[i]);
+                        //if(checkClass)
+                        if (checkClass(table, s)) {
+                            wClass(table, thisDay[s]);
+                        }
+                        else {
+                            let nextWeek = searchWeekClass(table, s);
+                            wClass(table, nextWeek[1]);
+                            break;
+                        }
                         //Если пара нашлась, прекращаем проходить по циклу.
                         break;
                         //continue;
@@ -127,7 +135,7 @@ function week() {
                         if (arrayMinMax[i][2] < startClass) {
                             //То проверяем, есть ли пары в этот день
                             //console.log('Пар еще небыло');
-                            let nextWeek = searchWeekClass(table, day_of_week-1)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
+                            let nextWeek = searchWeekClass(table, day_of_week - 1)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
                             wClass(table, nextWeek);
                         }
                         //Если пары закончились
@@ -150,8 +158,7 @@ function week() {
                             }
                         }
                     }
-                    else 
-                    {
+                    else {
                         //console.log(arrayMinMax[i][0])
                         let nextWeek = searchWeekClass(table, day_of_week);
                         wClass(table, nextWeek[1]);
@@ -193,19 +200,22 @@ function week() {
         _min.setHours(_minMax[0].split(':')[0], _minMax[0].split(':')[1], 0);//Разделяем строку времени пары на время начала пары
         _max.setHours(_minMax[1].split(':')[0], _minMax[1].split(':')[1], 0);//Разделяем строку времени пары на время конца пары
         _time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds());//Задаем текущее время
-        // _time.setHours(18, 42, 50);
+        // _time.setHours(18, 40, 50);
         // console.log(_time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds()))
         return [_min, _max, _time, _minMax.join(' - ')];//Возвращаем начало пары, конец пары, текущее время и строку времени пары
     }
     //=================================================================================================//
     //Поиск следующей пары текущего дня
     function searchClass(table, k = 0) {
-        var _className = table.querySelectorAll('tr[class]:not(.space)')[(day_of_week-1)*4].className.substr(0, 3);//Если стоит два или больше класса, делаем подстроку из 3 символов
+        var _className = table.querySelectorAll('tr[class]:not(.space)')[(day_of_week - 1) * 4].className.substr(0, 3);//Если стоит два или больше класса, делаем подстроку из 3 символов
         var thisDay = table.querySelectorAll('tr[class^=' + _className + ']');//список строк таблицы текущего дня недели (список пар от 4-7)
         var arrayInfo = [];//Массив наименования пар
         var arrayMinMax = [];//Двумерный массив каждой строки времени n-ой пары
         var arrayTime = [];
-
+        // k = k < 0 ? 0 : k;
+        if (k < 0) {
+            k = 0;
+        }
         for (var i = k; i < thisDay.length; i++) {
             arrayInfo[i] = thisDay[i].querySelectorAll('td:nth-last-child(1)')[0];//Наименование пары
             arrayTime[i] = thisDay[i].querySelectorAll('td:nth-last-child(2)')[0];//Время
@@ -225,13 +235,13 @@ function week() {
     }
     //=================================================================================================//
     //Есть ли сейчас пара
-    function checkClass(table, k=0) {
-        var _className = table.querySelectorAll('tr[class]:not(.space)')[(day_of_week-1)*4].className.substr(0, 3);//Если стоит два или больше класса, делаем подстроку из 3 символов
+    function checkClass(table, k = 0) {
+        var _className = table.querySelectorAll('tr[class]:not(.space)')[(day_of_week - 1) * 4].className.substr(0, 3);//Если стоит два или больше класса, делаем подстроку из 3 символов
         var thisDay = table.querySelectorAll('tr[class^=' + _className + ']');//список строк таблицы текущего дня недели (список пар от 4-7)
         if (thisDay[k].querySelectorAll('td:nth-last-child(1)')[0].innerHTML === "&nbsp;") {
             return false;
         }
-        else 
+        else
             return true;
 
     }
@@ -247,10 +257,10 @@ function week() {
         if (_thisDay.length > 1) {
             for (var i = k; i < _thisDay.length; i++) {
                 for (var j = 0; j < _thisDay[i].length; j++) {
-                    if(_thisDay[i][j].className == 'this-class') {
+                    if (_thisDay[i][j].className == 'this-class') {
                         continue;
                     } else {
-                       _thisDay[i][j].classList.add('last-class');
+                        _thisDay[i][j].classList.add('last-class');
                     }
                 }
             }
@@ -262,7 +272,7 @@ function week() {
             else {
                 _thisDay.classList.add('last-class');
             }
-        
+
         }
     }
     //=================================================================================================//
@@ -345,24 +355,22 @@ function week() {
             // console.log(arrayMinMax[i][2]);
             // console.log('-----------');
             // console.log(thisDay);
-            if (arrayMinMax[0][2] < arrayMinMax[0][0]) { 
+            if (arrayMinMax[0][2] < arrayMinMax[0][0]) {
                 return 0;
             }
-            else if (i < thisDay.length-1) 
-            {
+            else if (i < thisDay.length - 1) {
                 if (arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] < arrayMinMax[i + 1][0]) {
-                    return i+1;
+                    return (i + 1);
                 }
             }
-            else if (i == 3)
-            {
+            else if (i == 3) {
                 if (arrayMinMax[i][2] > arrayMinMax[i][0] && arrayMinMax[i][2] < arrayMinMax[i][1]) {
-                    return thisDay.length-1;
+                    return thisDay.length - 1;
                 }
                 else
-                    return thisDay.length-1;
+                    return thisDay.length - 1;
             }
-                
+
 
         }
     }
