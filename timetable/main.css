@@ -27,7 +27,7 @@ main .odd, main .even {
     display: flex;
     height: 70vh;
     min-height: 50vh;
-    width: 100vw;
+    /* width: 100vw; */
     min-width: 35vw;
     margin: 0 20px;
     height: 100%;
