@@ -69,10 +69,10 @@ function week() {
             for (var i = s; i < arrayMinMax.length; i++) {
                 if (!searchClass(table, s - 1)) {
                     var next = searchWeekClass(table, day_of_week)[1];
+                    // console.log('123')
                     wClass(table, next);
                     break;
                     //changeWeek(table);
-                    // console.log('test');
                 } else if (searchClass(table, s - 1)) {
                     //Если время > начала пары и < начала следующей пары, т.е. Пара
                     //15:10 > 13:20 && 15:10 < 15:15
@@ -92,7 +92,7 @@ function week() {
                         //break;
                     }
                     else if (i > 0 && arrayMinMax[i][2] > arrayMinMax[i - 1][0] && arrayMinMax[i][2] < arrayMinMax[i - 1][1] && searchClass(table)) {
-                        //console.log('Идет пара');
+                        // console.log('Идет пара');
                         if (checkClass(table, i - 1)) {
                             gClass(table, thisDay[i - 1]);
                             break;
@@ -113,8 +113,7 @@ function week() {
                     else if (i > 0 && arrayMinMax[i][2] > arrayMinMax[i - 1][0] && arrayMinMax[i][2] > arrayMinMax[i - 1][1] && arrayMinMax[i][2] < endClass) {
                         //проверяем, есть ли следующая пара
                         // console.log('Перемена');
-                        //console.log(thisDay[i])
-                        //if(checkClass)
+                        // console.log(thisDay[i])
                         if (checkClass(table, s)) {
                             wClass(table, thisDay[s]);
                         }
@@ -131,10 +130,10 @@ function week() {
                     //Пример: 20:00 > 19:51 || 12:00 < 13:20
                     else if (arrayMinMax[i][2] > endClass || arrayMinMax[i][2] < startClass) {
                         //Если пары еще не начались
-                        // console.log('123')
+                        //  console.log('123')
                         if (arrayMinMax[i][2] < startClass) {
                             //То проверяем, есть ли пары в этот день
-                            //console.log('Пар еще небыло');
+                            // console.log('Пар еще небыло');
                             let nextWeek = searchWeekClass(table, day_of_week - 1)[1];//[1][a,b]. a - День недели найденой пары, b - строка табилцы
                             wClass(table, nextWeek);
                         }
@@ -152,8 +151,8 @@ function week() {
                             }
                             //Если другой день недели, т.е. !=5 (не Пт)
                             else {
-                                //console.log('Другой день недели')
-                                let nextWeek = searchWeekClass(table, thisDay[i], day_of_week - 1);
+                                // console.log('Другой день недели')
+                                let nextWeek = searchWeekClass(table, day_of_week)[1];
                                 wClass(table, nextWeek);
                             }
                         }
@@ -254,6 +253,7 @@ function week() {
     //Если пара не идет (перемена/закончились пары/еще не начинались)
     function wClass(table, _thisDay, k = 0) {
         //Если _thisDay массив, то закрашиваем строку + день
+        // console.log(_thisDay);
         if (_thisDay.length > 1) {
             for (var i = k; i < _thisDay.length; i++) {
                 for (var j = 0; j < _thisDay[i].length; j++) {
