@@ -1,9 +1,9 @@
-const CACHE_NAME = 'timestamp-v4';
+const CACHE_NAME = 'timetable-v5';
 const CACHE_URLS = [
-  '/timestamp/offline.html',
-  '/timestamp/main.css',
-  '/timestamp/weeks.js',
-  '/timestamp/img/icons/favicon/favicon-16x16.png',
+  '/timetable/offline.html',
+  '/timetable/main.css',
+  '/timetable/weeks.js',
+  '/timetable/img/icons/favicon/favicon-16x16.png',
 ];
 
 
