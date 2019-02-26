@@ -1,4 +1,4 @@
-const CACHE_NAME = 'timestamp-v1';
+const CACHE_NAME = 'timestamp-v3';
 const CACHE_URLS = [
   '/offline.html',
   '/main.css',
