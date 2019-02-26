@@ -25,5 +25,8 @@ function include(){
         head.innerHTML += links[i];
     }
 }
-
 include();
+
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.register('/sw.js');
+}
