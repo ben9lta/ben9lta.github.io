@@ -1,6 +1,6 @@
 addEventListener('install', installEvent => {
     installEvent.waitUntil(
-      caches.open('timeTable')
+      caches.open('timetable')
       .then( timeTable => {
         timeTable.addAll([
          'https://ben9lta.github.io/timetable/offline.html',
