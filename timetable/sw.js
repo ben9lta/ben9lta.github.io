@@ -94,17 +94,17 @@ self.addEventListener('fetch', function (event) {
   })
   );
 });
-    else
-    {
-      return fetch(event.request).catch(function (err) {
-        return caches.open(CACHE_NAME).then(function(cache){
-          if(event.request.headers.get('accept').includes('text/html')) {
-            return cache.match('/offline.html');
-          }
-        });
-      });
+    // else
+    // {
+    //   return fetch(event.request).catch(function (err) {
+    //     return caches.open(CACHE_NAME).then(function(cache){
+    //       if(event.request.headers.get('accept').includes('text/html')) {
+    //         return cache.match('/offline.html');
+    //       }
+    //     });
+    //   });
 
-    }
+    // }
 
 //   }).then(function(r) {
 //     response = r;
