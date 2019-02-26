@@ -3,10 +3,10 @@ addEventListener('install', installEvent => {
       caches.open('timeTable')
       .then( timeTable => {
         timeTable.addAll([
-         '/offline.html',
-         '/main.css',
-         '/weeks.js',
-         '/img/icons/favicon/favicon-16x16.png'
+         'https://ben9lta.github.io/timetable/offline.html',
+         'https://ben9lta.github.io/timetable/main.css',
+         'https://ben9lta.github.io/timetable/weeks.js',
+         'https://ben9lta.github.io/timetable/img/icons/favicon/favicon-16x16.png'
         ]); // конец addAll
       }) // конец open.then
     ); // конец waitUntil
@@ -33,7 +33,7 @@ addEventListener('fetch', fetchEvent => {
          // это запрос к веб-странице, то...
          if (request.headers.get('Accept').includes('text/html')) {
            // покажите вашу офлайн-страницу
-           return caches.match('/offline.html');
+           return caches.match('https://ben9lta.github.io/timetable/offline.html');
          } // 1конец if
        } // конец if/else
      }) // конец match.then
