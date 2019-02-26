@@ -11,6 +11,7 @@ function include(){
     '<link rel="icon" type="image/png" sizes="192x192"  href="img/icons/favicon/android-icon-192x192.png">',
     '<link rel="icon" type="image/png" sizes="32x32" href="img/icons/favicon/favicon-32x32.png">',
     '<link rel="icon" type="image/png" sizes="96x96" href="img/icons/favicon/favicon-96x96.png">',
+    '<link rel="icon" type="image/png" sizes="96x96" href="img/icons/favicon/favicon.ico">',
     '<link rel="manifest" href="img/icons/favicon/manifest.json">'];
     
     const meta = ['<meta name="msapplication-TileColor" content="#ffffff">',
@@ -28,5 +29,5 @@ function include(){
 include();
 
 if (navigator.serviceWorker) {
-  navigator.serviceWorker.register('/sw.js');
+    navigator.serviceWorker.register('https://ben9lta.github.io/timetable/sw.js');
 }
