@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v10';
+const CACHE_NAME = 'v11';
 const CACHE_URLS = [
   '/timetable/offline.html',
   '/timetable/main.css',
@@ -15,7 +15,7 @@ self.addEventListener('install', (event) => {
 });
 
 this.addEventListener('activate', function(event) {
-  var cacheWhitelist = ['v9'];
+  var cacheWhitelist = ['v10'];
 
   event.waitUntil(
     caches.keys().then(function(keyList) {
@@ -34,14 +34,14 @@ this.addEventListener('fetch', function(event) {
     return fetch(event.request);
   }).then(function(r) {
     response = r;
-    caches.open('v10').then(function(cache) {
+    caches.open('v11').then(function(cache) {
       console.log(event.request, response);
       console.log(cache);
       cache.put(event.request, response);
     });
     return response.clone();
   }).catch(function() {
-    return caches.match('/sw-test/offline.html');
+    return caches.match('/timetable/offline.html');
   }));
 });
 // var MAX_AGE = 86400000;
