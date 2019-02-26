@@ -157,8 +157,8 @@ self.addEventListener('fetch', (event) => {
     // try the cache
     caches.match(event.request).then((cachedResponse) =>
       // fall back to network
-      console.log(fetch(event.request)),
-      cachedResponse //|| fetch(event.request)
+      // console.log(fetch(event.request)),
+      cachedResponse || console.log(fetch(event.request))//|| fetch(event.request)
     ).catch(() =>
       // if both fail, show a generic fallback:
       caches.match('/offline.html')
