@@ -1,9 +1,9 @@
 const CACHE_NAME = 'timestamp-v4';
 const CACHE_URLS = [
-  '/timetable/offline.html',
-  '/timetable/main.css',
-  '/timetable/weeks.js',
-  '/timetable/img/icons/favicon/favicon-16x16.png',
+  '/timestamp/offline.html',
+  '/timestamp/main.css',
+  '/timestamp/weeks.js',
+  '/timestamp/img/icons/favicon/favicon-16x16.png',
 ];
 
 
@@ -152,16 +152,40 @@ self.addEventListener('activate', (event) => {
   ));
 });
 
-self.addEventListener('fetch', (event) => {
+var MAX_AGE = 86400000;
+
+self.addEventListener('fetch', function(event) {
   event.respondWith(
-    // try the cache
-    caches.match(event.request).then((cachedResponse) =>
-      // fall back to network
-      // console.log(fetch(event.request)),
-      cachedResponse || console.log(fetch(event.request))//|| fetch(event.request)
-    ).catch(() =>
-      // if both fail, show a generic fallback:
-      caches.match('/offline.html')
-    )
+      // ищем запрошенный ресурс среди закэшированных
+      caches.match(event.request).then(function(cachedResponse) {
+          var lastModified, fetchRequest;
+          // если ресурс есть в кэше
+          if (cachedResponse) {
+              // получаем дату последнего обновления
+              lastModified = new Date(cachedResponse.headers.get('last-modified'));
+              // и если мы считаем ресурс устаревшим
+              if (lastModified && (Date.now() - lastModified.getTime()) > MAX_AGE) {
+                  fetchRequest = event.request.clone();
+                  // создаём новый запрос
+                  return fetch(fetchRequest).then(function(response) {
+                      // при неудаче всегда можно выдать ресурс из кэша
+                      if (!response || response.status !== 200) {
+                          return cachedResponse;
+                      }
+                      // обновляем кэш
+                      caches.open(CACHE_NAME).then(function(cache) {
+                          cache.put(event.request, response.clone());
+                      });
+                      // возвращаем свежий ресурс
+                      return response;
+                  }).catch(function() {
+                      return cachedResponse;
+                  });
+              }
+              return cachedResponse;
+          }
+          // запрашиваем из сети как обычно
+          return fetch(event.request);
+      })
   );
 });
