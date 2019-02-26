@@ -1,9 +1,9 @@
 const CACHE_NAME = 'timestamp-v4';
 const CACHE_URLS = [
-  '/offline.html',
-  '/main.css',
-  '/weeks.js',
-  '/img/icons/favicon/favicon-16x16.png',
+  '/timestamp/offline.html',
+  '/timestamp/main.css',
+  '/timestamp/weeks.js',
+  '/timestamp/img/icons/favicon/favicon-16x16.png',
 ];
 
 
