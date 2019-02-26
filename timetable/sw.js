@@ -41,45 +41,65 @@
 //   ); // конец respondWith
 // }); // конец addEventListener
 const CACHE_NAME = 'timestamp-v1';
+const CACHE_URLS = [
+  '/offline.html',
+  '/main.css',
+  '/weeks.js',
+  '/img/icons/favicon/favicon-16x16.png',
+]
 
-this.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll([
-        '/offline.html',
-        '/main.css',
-        '/weeks.js',
-        '/img/icons/favicon/favicon-16x16.png'
-      ]);
-    })
+    caches.open(CACHE_NAME)
+      .then(function (cache) {
+        return cache.addAll(CACHE_URLS);
+      })
   );
 });
 
-this.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
+  console.log('Fetch event for ', event.request.url);
   var response;
-  event.respondWith(caches.match(event.request).then(function(response) {
-    if(response){
+  event.respondWith(caches.match(event.request).then(function (response) {
+    if (response) {
+      console.log('Found ', event.request.url, ' in cache');
       return response;
     }
-    else 
-    {
-      return fetch(event.request).catch(function (err) {
-        return caches.open(CACHE_NAME).then(function(cache){
-          if(event.request.headers.get('accept').includes('text/html')) {
-            return cache.match('/offline.html');
-          }
-        });
+    console.log('Network request for ', event.request.url);
+    return fetch(event.request).then(function (response) {
+      if (response.status === 404) {
+        return caches.match('main.css')
+      }
+      return caches.open(CACHE_URLS).then(function (cache) {
+        cache.put(event.request.url, response.clone());
+        return response;
       });
-
-    }
-    
-  }).then(function(r) {
-    response = r;
-    caches.open(CACHE_NAME).then(function(cache) {
-      cache.put(event.request, response);
     });
-    return response.clone();
-  }).catch(function() {
-    return caches.match('/offline.html');
-  }));
+  }).catch(function (error) {
+    console.log('Error, ', error);
+    return caches.match('offline.html');
+  })
+  );
 });
+    // else
+    // {
+    //   return fetch(event.request).catch(function (err) {
+    //     return caches.open(CACHE_NAME).then(function(cache){
+    //       if(event.request.headers.get('accept').includes('text/html')) {
+    //         return cache.match('/offline.html');
+    //       }
+    //     });
+    //   });
+
+    // }
+
+//   }).then(function(r) {
+//     response = r;
+//     caches.open(CACHE_NAME).then(function(cache) {
+//       cache.put(event.request, response);
+//     });
+//     return response.clone();
+//   }).catch(function() {
+//     return caches.match('/offline.html');
+//   }));
+// });
