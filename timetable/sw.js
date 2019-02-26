@@ -50,6 +50,7 @@ const CACHE_URLS = [
 ];
 
 self.addEventListener('install', function (event) {
+  console.log('[Service Worker] Installing Service Worker ...', event);
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(function (cache) {
