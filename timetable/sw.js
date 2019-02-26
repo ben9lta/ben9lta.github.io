@@ -38,6 +38,8 @@ this.addEventListener('fetch', function(event) {
       console.log(event.request, response);
       console.log(cache);
       cache.put(event.request, response);
+      console.log('============')
+      console.log(cache);
     });
     return response.clone();
   }).catch(function() {
