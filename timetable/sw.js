@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v7';
+const CACHE_NAME = 'v8';
 const CACHE_URLS = [
   '/timetable/offline.html',
   '/timetable/main.css',
@@ -15,7 +15,7 @@ self.addEventListener('install', (event) => {
 });
 
 this.addEventListener('activate', function(event) {
-  var cacheWhitelist = ['v6'];
+  var cacheWhitelist = ['v8'];
 
   event.waitUntil(
     caches.keys().then(function(keyList) {
@@ -34,7 +34,7 @@ this.addEventListener('fetch', function(event) {
     return fetch(event.request);
   }).then(function(r) {
     response = r;
-    caches.open('v7').then(function(cache) {
+    caches.open('v8').then(function(cache) {
       cache.put(event.request, response);
     });
     return response.clone();
