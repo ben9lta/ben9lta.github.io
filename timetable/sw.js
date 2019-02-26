@@ -1,4 +1,4 @@
-const CACHE_NAME = 'timestamp-v3';
+const CACHE_NAME = 'timestamp-v4';
 const CACHE_URLS = [
   '/offline.html',
   '/main.css',
@@ -7,43 +7,44 @@ const CACHE_URLS = [
 ];
 
 
-addEventListener('install', installEvent => {
-    installEvent.waitUntil(
-      caches.open(CACHE_NAME)
-      .then( timeTable => {
-        timeTable.addAll(CACHE_URLS); // конец addAll
-      }) // конец open.then
-    ); // конец waitUntil
-  }); // конец addEventListener
+// addEventListener('install', installEvent => {
+//     installEvent.waitUntil(
+//       caches.open(CACHE_NAME)
+//       .then( timeTable => {
+//         timeTable.addAll(CACHE_URLS); // конец addAll
+//       }) // конец open.then
+//     ); // конец waitUntil
+//   }); // конец addEventListener
 
-  // Всегда, когда файл запрашивается
-addEventListener('fetch', fetchEvent => {
-  const request = fetchEvent.request;
-  fetchEvent.respondWith(
-    // Сначала попытка запросить его из Сети
-    fetch(request)
-    .then( responseFromFetch => {
-      return responseFromFetch;
-    }) // конец fetch.then
-    // Если не сработало, то...
-    .catch( fetchError => {
-      // пытаемся найти в кеше
-      caches.match(request)
-      .then( responseFromCache => {
-        if (responseFromCache) {
-         return responseFromCache;
-       // если не сработало и...
-       } else {
-         // это запрос к веб-странице, то...
-         if (request.headers.get('accept').includes('text/html')) {
-           // покажите вашу офлайн-страницу
-           return caches.match('/offline.html');
-         } // 1конец if
-       } // конец if/else
-     }) // конец match.then
-   }) // конец fetch.catch
-  ); // конец respondWith
-}); // конец addEventListener
+//   // Всегда, когда файл запрашивается
+// addEventListener('fetch', fetchEvent => {
+//   const request = fetchEvent.request;
+//   fetchEvent.respondWith(
+//     // Сначала попытка запросить его из Сети
+//     fetch(request)
+//     .then( responseFromFetch => {
+//       return responseFromFetch;
+//     }) // конец fetch.then
+//     // Если не сработало, то...
+//     .catch( fetchError => {
+//       // пытаемся найти в кеше
+//       caches.match(request)
+//       .then( responseFromCache => {
+//         if (responseFromCache) {
+//          return responseFromCache;
+//        // если не сработало и...
+//        } else {
+//          // это запрос к веб-странице, то...
+//          if (request.headers.get('accept').includes('text/html')) {
+//            // покажите вашу офлайн-страницу
+//            return caches.match('/offline.html');
+//          } // 1конец if
+//        } // конец if/else
+//      }) // конец match.then
+//    }) // конец fetch.catch
+//   ); // конец respondWith
+// }); // конец addEventListener
+
 
 
 // self.addEventListener('install', function (event) {
@@ -116,3 +117,50 @@ addEventListener('fetch', fetchEvent => {
 //     return caches.match('/offline.html');
 //   }));
 // });
+
+
+const expectedCaches = [
+  'movies-static-v1',
+];
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) =>
+      cache.addAll(CACHE_URLS)
+    )
+  );
+});
+
+// once a new Service Worker has installed & a previous version isn't
+// being used, the new one activates so we can clean-up & migrate
+self.addEventListener('activate', (event) => {
+  // remove caches beginning "movies-" that aren't in
+  // expectedCaches
+  event.waitUntil(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
+        cacheNames.map((cacheName) => {
+          if (/^timestamp-/.test(cacheName)) {
+            if (CACHE_NAME.indexOf(cacheName) === -1) {
+              return caches.delete(cacheName);
+            }
+          }
+
+          return null;
+        })
+      )
+  ));
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    // try the cache
+    caches.match(event.request).then((cachedResponse) =>
+      // fall back to network
+      cachedResponse || fetch(event.request)
+    ).catch(() =>
+      // if both fail, show a generic fallback:
+      caches.match('/offline.html')
+    )
+  );
+});
