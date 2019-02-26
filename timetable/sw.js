@@ -3,9 +3,9 @@ addEventListener('install', installEvent => {
       caches.open('timetable')
       .then( timeTable => {
         timeTable.addAll([
-         '/offline.html',
-         '/main.css',
-         '/weeks.js',
+         'offline.html',
+         'main.css',
+         'weeks.js',
          '/img/icons/favicon/favicon-16x16.png'
         ]); // конец addAll
       }) // конец open.then
