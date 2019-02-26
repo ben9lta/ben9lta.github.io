@@ -32,14 +32,22 @@ include();
 //     navigator.serviceWorker.register('/sw.js');
 // }
 
-if ('serviceWorker' in navigator) {
-    // Register a service worker hosted at the root of the
-    // site using the default scope.
-    navigator.serviceWorker.register('/sw.js').then(function (registration) {
-        console.log('Service worker registration succeeded:', registration);
-    }, /*catch*/ function (error) {
-        console.log('Service worker registration failed:', error);
+// if ('serviceWorker' in navigator) {
+//     // Register a service worker hosted at the root of the
+//     // site using the default scope.
+//     navigator.serviceWorker.register('sw.js').then(function (registration) {
+//         console.log('Service worker registration succeeded:', registration);
+//     }, /*catch*/ function (error) {
+//         console.log('Service worker registration failed:', error);
+//     });
+// } else {
+//     console.log('Service workers are not supported.');
+// }
+if('serviceWorker' in navigator){
+    // Register service worker
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+        console.log("SW registration succeeded. Scope is "+reg.scope);
+    }).catch(function(err){
+        console.error("SW registration failed with error "+err);
     });
-} else {
-    console.log('Service workers are not supported.');
 }
