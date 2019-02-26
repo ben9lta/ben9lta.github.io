@@ -1,4 +1,5 @@
-const CACHE_NAME = 'v11';
+//const CACHE_NAME = 'v11';
+const CACHE_NAME = 'v1';
 const CACHE_URLS = [
   '/timetable/offline.html',
   '/timetable/main.css',
@@ -6,80 +7,51 @@ const CACHE_URLS = [
   '/timetable/img/icons/favicon/favicon-16x16.png',
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) =>
-      cache.addAll(CACHE_URLS)
-    )
-  );
+this.addEventListener('install', function (event) {
+	event.waitUntil(caches).open('v1').then(function (cache) {
+		return cache.addAll(CACHE_URLS);
+  })
 });
 
-this.addEventListener('activate', function(event) {
-  var cacheWhitelist = ['v10'];
 
-  event.waitUntil(
-    caches.keys().then(function(keyList) {
-      return Promise.all(keyList.map(function(key) {
-        if (cacheWhitelist.indexOf(key) === -1) {
-          return caches.delete(key);
-        }
-      }));
-    })
-  );
-});
 
-this.addEventListener('fetch', function(event) {
-  var response;
-  event.respondWith(caches.match(event.request).then(function() {
-    return fetch(event.request);
-  }).then(function(r) {
-    response = r;
-    caches.open('v11').then(function(cache) {
-      console.log(event.request, response);
-      console.log(cache);
-      cache.put(event.request, response);
-      console.log('============')
-      console.log(cache);
-    });
-    return response.clone();
-  }).catch(function() {
-    return caches.match('/timetable/offline.html');
-  }));
-});
-// var MAX_AGE = 86400000;
+// self.addEventListener('install', (event) => {
+//   event.waitUntil(
+//     caches.open(CACHE_NAME).then((cache) =>
+//       cache.addAll(CACHE_URLS)
+//     )
+//   );
+// });
 
-// self.addEventListener('fetch', function (event) {
-//   event.respondWith(
-//     // ищем запрошенный ресурс среди закэшированных
-//     caches.match(event.request).then(function (cachedResponse) {
-//       var lastModified, fetchRequest;
-//       // если ресурс есть в кэше
-//       if (cachedResponse) {
-//         // получаем дату последнего обновления
-//         lastModified = new Date(cachedResponse.headers.get('last-modified'));
-//         // и если мы считаем ресурс устаревшим
-//         if (lastModified && (Date.now() - lastModified.getTime()) > MAX_AGE) {
-//           fetchRequest = event.request.clone();
-//           // создаём новый запрос
-//           return fetch(fetchRequest).then(function (response) {
-//             // при неудаче всегда можно выдать ресурс из кэша
-//             if (!response || response.status !== 200) {
-//               return cachedResponse;
-//             }
-//             // обновляем кэш
-//             caches.open(CACHE_NAME).then(function (cache) {
-//               cache.put(event.request, response.clone());
-//             });
-//             // возвращаем свежий ресурс
-//             return response;
-//           }).catch(function () {
-//             return cachedResponse;
-//           });
+// this.addEventListener('activate', function(event) {
+//   var cacheWhitelist = ['v10'];
+
+//   event.waitUntil(
+//     caches.keys().then(function(keyList) {
+//       return Promise.all(keyList.map(function(key) {
+//         if (cacheWhitelist.indexOf(key) === -1) {
+//           return caches.delete(key);
 //         }
-//         return cachedResponse;
-//       }
-//       // запрашиваем из сети как обычно
-//       return fetch(event.request);
+//       }));
 //     })
 //   );
+// });
+
+// this.addEventListener('fetch', function(event) {
+//   var response;
+//   event.respondWith(caches.match(event.request).then(function() {
+//     return fetch(event.request);
+//   }).then(function(r) {
+//     response = r;
+//     caches.open('v11').then(function(cache) {
+//       console.log(event.request, response);
+//       console.log(cache);
+//       cache.put(event.request, response);
+//       console.log('============')
+//       console.log(cache);
+//     });
+//     return response.clone();
+//   }).catch(function() {
+//     return caches.match('/timetable/offline.html');
+//   }));
 // });
