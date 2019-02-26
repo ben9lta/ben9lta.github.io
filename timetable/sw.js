@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v9';
+const CACHE_NAME = 'v10';
 const CACHE_URLS = [
   '/timetable/offline.html',
   '/timetable/main.css',
@@ -34,7 +34,9 @@ this.addEventListener('fetch', function(event) {
     return fetch(event.request);
   }).then(function(r) {
     response = r;
-    caches.open('v8').then(function(cache) {
+    caches.open('v10').then(function(cache) {
+      console.log(event.request, response);
+      console.log(cache);
       cache.put(event.request, response);
     });
     return response.clone();
