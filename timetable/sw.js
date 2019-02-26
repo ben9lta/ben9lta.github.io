@@ -17,33 +17,33 @@ addEventListener('install', installEvent => {
   }); // конец addEventListener
 
   // Всегда, когда файл запрашивается
-// addEventListener('fetch', fetchEvent => {
-//   const request = fetchEvent.request;
-//   fetchEvent.respondWith(
-//     // Сначала попытка запросить его из Сети
-//     fetch(request)
-//     .then( responseFromFetch => {
-//       return responseFromFetch;
-//     }) // конец fetch.then
-//     // Если не сработало, то...
-//     .catch( fetchError => {
-//       // пытаемся найти в кеше
-//       caches.match(request)
-//       .then( responseFromCache => {
-//         if (responseFromCache) {
-//          return responseFromCache;
-//        // если не сработало и...
-//        } else {
-//          // это запрос к веб-странице, то...
-//          if (request.headers.get('accept').includes('text/html')) {
-//            // покажите вашу офлайн-страницу
-//            return caches.match('/offline.html');
-//          } // 1конец if
-//        } // конец if/else
-//      }) // конец match.then
-//    }) // конец fetch.catch
-//   ); // конец respondWith
-// }); // конец addEventListener
+addEventListener('fetch', fetchEvent => {
+  const request = fetchEvent.request;
+  fetchEvent.respondWith(
+    // Сначала попытка запросить его из Сети
+    fetch(request)
+    .then( responseFromFetch => {
+      return responseFromFetch;
+    }) // конец fetch.then
+    // Если не сработало, то...
+    .catch( fetchError => {
+      // пытаемся найти в кеше
+      caches.match(request)
+      .then( responseFromCache => {
+        if (responseFromCache) {
+         return responseFromCache;
+       // если не сработало и...
+       } else {
+         // это запрос к веб-странице, то...
+         if (request.headers.get('accept').includes('text/html')) {
+           // покажите вашу офлайн-страницу
+           return caches.match('/offline.html');
+         } // 1конец if
+       } // конец if/else
+     }) // конец match.then
+   }) // конец fetch.catch
+  ); // конец respondWith
+}); // конец addEventListener
 
 
 // self.addEventListener('install', function (event) {
@@ -70,30 +70,30 @@ addEventListener('install', installEvent => {
 //   );
 // });
 
-self.addEventListener('fetch', function (event) {
-  console.log('Fetch event for ', event.request.url);
-  var response;
-  event.respondWith(caches.match(event.request).then(function (response) {
-    if (response) {
-      console.log('Found ', event.request.url, ' in cache');
-      return response;
-    }
-    console.log('Network request for ', event.request.url);
-    return fetch(event.request).then(function (response) {
-      if (response.status === 404) {
-        return caches.match('main.css')
-      }
-      return caches.open(CACHE_URLS).then(function (cache) {
-        cache.put(event.request.url, response.clone());
-        return response;
-      });
-    });
-  }).catch(function (error) {
-    console.log('Error, ', error);
-    return caches.match('offline.html');
-  })
-  );
-});
+// self.addEventListener('fetch', function (event) {
+//   console.log('Fetch event for ', event.request.url);
+//   var response;
+//   event.respondWith(caches.match(event.request).then(function (response) {
+//     if (response) {
+//       console.log('Found ', event.request.url, ' in cache');
+//       return response;
+//     }
+//     console.log('Network request for ', event.request.url);
+//     return fetch(event.request).then(function (response) {
+//       if (response.status === 404) {
+//         return caches.match('main.css')
+//       }
+//       return caches.open(CACHE_URLS).then(function (cache) {
+//         cache.put(event.request.url, response.clone());
+//         return response;
+//       });
+//     });
+//   }).catch(function (error) {
+//     console.log('Error, ', error);
+//     return caches.match('offline.html');
+//   })
+//   );
+// });
     // else
     // {
     //   return fetch(event.request).catch(function (err) {
