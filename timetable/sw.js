@@ -40,6 +40,7 @@
 //    }) // конец fetch.catch
 //   ); // конец respondWith
 // }); // конец addEventListener
+
 const CACHE_NAME = 'timestamp-v2';
 const CACHE_URLS = [
   '/offline.html',

@@ -118,7 +118,7 @@ function week() {
                             wClass(table, thisDay[s]);
                         }
                         else {
-                            let nextWeek = searchWeekClass(table, s);
+                            let nextWeek = searchWeekClass(table, day_of_week);
                             wClass(table, nextWeek[1]);
                             break;
                         }
@@ -139,7 +139,7 @@ function week() {
                         }
                         //Если пары закончились
                         else if (arrayMinMax[i][2] > endClass) {
-                            //console.log('Пары закончились');
+                            // console.log('Пары закончились');
                             //То проверяем какой сегодня день недели
                             //Если сегодня пятница, то меняем таблицу => неделю, и день недели меняем на Пн
                             if (day_of_week == 5) {
