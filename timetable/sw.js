@@ -46,7 +46,7 @@ const CACHE_URLS = [
   '/main.css',
   '/weeks.js',
   '/img/icons/favicon/favicon-16x16.png',
-]
+];
 
 self.addEventListener('install', function (event) {
   event.waitUntil(
@@ -54,6 +54,20 @@ self.addEventListener('install', function (event) {
       .then(function (cache) {
         return cache.addAll(CACHE_URLS);
       })
+  );
+});
+
+self.addEventListener('activate', function(event) {
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          if (cacheName.startsWith('pages-cache-') && staticCacheName !== cacheName) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
   );
 });
 
