@@ -1,5 +1,5 @@
 //const CACHE_NAME = 'v11';
-const CACHE_NAME = 'v2';
+const CACHE_NAME = 'v3';
 const CACHE_URLS = [
   '/timetable/offline.html',
   '/timetable/main.css',
@@ -17,6 +17,23 @@ self.addEventListener('install', function(event) {
         console.log('Opened cache');
         return cache.addAll(CACHE_URLS);
       })
+  );
+});
+
+self.addEventListener('activate', function(event) {
+
+  var cacheWhitelist = ['v1', 'v2'];
+
+  event.waitUntil(
+    caches.keys().then(function(cacheNames) {
+      return Promise.all(
+        cacheNames.map(function(cacheName) {
+          if (cacheWhitelist.indexOf(cacheName) === -1) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
   );
 });
 
