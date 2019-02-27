@@ -1,10 +1,12 @@
 //const CACHE_NAME = 'v11';
-const CACHE_NAME = 'v1';
+const CACHE_NAME = 'v2';
 const CACHE_URLS = [
   '/timetable/offline.html',
   '/timetable/main.css',
+  '/timetable/include.js',
   '/timetable/weeks.js',
   '/timetable/img/icons/favicon/favicon-16x16.png',
+  
 ];
 
 self.addEventListener('install', function(event) {

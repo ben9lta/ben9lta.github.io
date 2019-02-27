@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', week);
+﻿document.addEventListener('DOMContentLoaded', week);
 function week() {
     var oddTable = document.getElementById('odd-table');//Нечетная
     var evenTable = document.getElementById('even-table');//Четная
