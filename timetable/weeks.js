@@ -375,6 +375,15 @@ function week() {
         }
     }
     //=================================================================================================//
-
+    setTimeout(function(){ 
+        let elem = document.getElementsByClassName("last-class"); 
+        if(document.getElementsByClassName('this-class')[0] === undefined) { 
+            document.getElementsByClassName('last-class')[0].scrollIntoView(true); 
+        } 
+        else 
+        { 
+            document.getElementsByClassName('this-class')[0].scrollIntoView(); 
+        } 
+    }, 50)
 }
 
