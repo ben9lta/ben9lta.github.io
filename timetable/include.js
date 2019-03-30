@@ -28,6 +28,10 @@
 }
 include();
 
+var script = document.createElement('script');
+script.src = "data.js";
+document.head.appendChild(script);
+
 if('serviceWorker' in navigator){
     // Register service worker
     navigator.serviceWorker.register('/timetable/sw.js', { scope: '/timetable/'}).then(function(reg){
@@ -36,3 +40,5 @@ if('serviceWorker' in navigator){
         console.error("SW registration failed with error "+err);
     });
 }
+
+
