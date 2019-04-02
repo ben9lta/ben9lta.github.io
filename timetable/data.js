@@ -180,6 +180,6 @@ function recTitle(arrHtml, el){
     });
 }
 
-showEven(_weekHtml);
-showOdd(weekHtml)
+showEven(weekHtml);
+showOdd(_weekHtml)
 
