@@ -35,7 +35,7 @@ function week() {
     var today = new Date(year, month, 0).getTime();// Год месяц 0 (-1 день от текущего месяца) в миллисекундах
     var now = new Date().getTime(); //Сегодняшние год месяц день в миллисекундах
     var week = Math.round((now - today) / (1000 * 60 * 60 * 24 * 7)); //(Сегодняшняя дата - начальная неделя) / неделю в миллисекундах = номер недели (чет/нечет)
-    if (week % 2) {
+    if (week % 2 === 0) {
         //even - четная неделя
         document.getElementsByTagName('main')[0].style = "flex-direction: column-reverse;";//Если четная, то нечетную меняем местами с четной
         checkTime(evenTable);
