@@ -4,9 +4,6 @@ function week() {
     var evenTable = document.getElementById('even-table');//Четная
 
     var getWeekNum = function(dt) {
-        /**
-         В коде функции — ошибка, воспользуйтесь вторым вариантом
-        */
         var ts,
            newYear,
            newYearDay,
