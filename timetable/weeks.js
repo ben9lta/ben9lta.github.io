@@ -3,6 +3,23 @@ function week() {
     var oddTable = document.getElementById('odd-table');//Нечетная
     var evenTable = document.getElementById('even-table');//Четная
 
+    var getWeekNum = function(dt) {
+        /**
+         В коде функции — ошибка, воспользуйтесь вторым вариантом
+        */
+        var ts,
+           newYear,
+           newYearDay,
+           wNum;
+    
+        ts = (dt) ? new Date(dt) : new Date();
+        newYear = new Date(ts.getFullYear(), 0, 1);
+        newYearDay = newYear.getDay();
+    
+        wNum = Math.floor(((ts.getTime() - newYear.getTime())/1000/60/60/24 + newYearDay)/7);
+    
+        return wNum+1;
+    }
     //=================================================================================================//
     //Функция добавления пробелов
     function tdNbsp(table) {
@@ -34,8 +51,9 @@ function week() {
     var month = new Date().getMonth();  //Месяц
     var today = new Date(year, month, 0).getTime();// Год месяц 0 (-1 день от текущего месяца) в миллисекундах
     var now = new Date().getTime(); //Сегодняшние год месяц день в миллисекундах
-    var week = Math.round((now - today) / (1000 * 60 * 60 * 24 * 7)); //(Сегодняшняя дата - начальная неделя) / неделю в миллисекундах = номер недели (чет/нечет)
-    if (week % 2 === 0) {
+    //var week = Math.floor((now - today) / (1000 * 60 * 60 * 24 * 7)); //(Сегодняшняя дата - начальная неделя) / неделю в миллисекундах = номер недели (чет/нечет)
+    var week = getWeekNum();
+    if (week % 2 == 0) {
         //even - четная неделя
         document.getElementsByTagName('main')[0].style = "flex-direction: column-reverse;";//Если четная, то нечетную меняем местами с четной
         checkTime(evenTable);
