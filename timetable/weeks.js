@@ -58,7 +58,7 @@ function week() {
         oddTable.getElementsByTagName('h2')[0].style = 'color: #efcc00;';
 
     }
-    else {
+    else if(week % 2 != 0){
         //odd - нечетная неделя
         document.getElementsByTagName('main')[0].style = "flex-direction: column;";//Если нечетная, то меняем местами с четной
         checkTime(oddTable);
