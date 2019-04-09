@@ -139,11 +139,13 @@ data.forEach(function(items){
 //dataItems.even[0][weekHtml[0][0].className][2]["title"]; // className][2]["title"] = 2 - это пара
 function showOdd(arrHtml){
     for(let i = 0; i < arrHtml.length; i++){
+        let weekString = arrHtml[i][0].className;
+        weekString = weekString.substr(weekString, 3);
         for(let j = 0; j < arrHtml[i].length; j++){
-            arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["odd"][0][arrHtml[i][0].className][j]["title"];
+            arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["odd"][0][weekString][j]["title"];
             arrHtml[i][j].addEventListener("click", function rec(){
-                arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["odd"][0][arrHtml[i][0].className][j]["fio"];
-                recTitle(arrHtml[i][j], dataItems["odd"][0][arrHtml[i][0].className][j]);
+                arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["odd"][0][weekString][j]["fio"];
+                recTitle(arrHtml[i][j], dataItems["odd"][0][weekString][j]);
             });
         }
     }
@@ -151,11 +153,13 @@ function showOdd(arrHtml){
 
 function showEven(arrHtml){
     for(let i = 0; i < arrHtml.length; i++){
+        let weekString = arrHtml[i][0].className;
+        weekString = weekString.substr(weekString, 3);
         for(let j = 0; j < arrHtml[i].length; j++){
-            arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["even"][0][arrHtml[i][0].className][j]["title"];
+            arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["even"][0][weekString][j]["title"];
             arrHtml[i][j].addEventListener("click", function rec(){
-                arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["even"][0][arrHtml[i][0].className][j]["fio"];
-                recTitle(arrHtml[i][j], dataItems["even"][0][arrHtml[i][0].className][j]);
+                arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["even"][0][weekString][j]["fio"];
+                recTitle(arrHtml[i][j], dataItems["even"][0][weekString][j]);
             });
         }
     }
