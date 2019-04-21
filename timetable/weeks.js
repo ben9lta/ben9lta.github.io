@@ -185,6 +185,12 @@ function week() {
                 }
             }
         }
+        else 
+        {
+            // console.log(table)
+            //console.log(table);
+            checkTime(table);
+        }
         //minMax = arrayTime[i].innerText//Строка времени n-ой пары
     }
     //=================================================================================================//
@@ -293,21 +299,25 @@ function week() {
     //=================================================================================================//
     //Функция смены недели
     function changeWeek(table) {
+        let _table;
         //Если таблица четная - меняем ее на нечетную
         if (table === oddTable) {
-            table = evenTable;
+            _table = evenTable;
             document.getElementsByTagName('main')[0].style = "flex-direction: column-reverse;";//Если четная, то нечетную меняем местами с четной
             oddTable.getElementsByTagName('h2')[0].style = 'color: rgb(40, 197, 22); text-decoration: underline;';
             evenTable.getElementsByTagName('h2')[0].style = 'color: #efcc00; ';
+            return _table;
         }
         //Если таблица нечетная - меняем на четную
         else {
-            table = oddTable;
+            _table = oddTable;
             document.getElementsByTagName('main')[0].style = "flex-direction: column;";//Если четная, то нечетную меняем местами с четной
             evenTable.getElementsByTagName('h2')[0].style = 'color: rgb(40, 197, 22); text-decoration: underline;';
             oddTable.getElementsByTagName('h2')[0].style = 'color: #efcc00;';
+            return _table;
         }
-        return table;
+        //console.log(_table);
+        //return _table;
     }
     //=================================================================================================//
     //Поиск пар по каждому дню
