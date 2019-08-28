@@ -1,189 +1,132 @@
+var SCHEDULE = {};
 
-var data = [
-    {
-        "even":[{
-            "tue":[
-                {
-                    "title":"Информационная безопасность в цифровой экономике. ауд. 11",
-                    "fio":"Гришин Игорь Юрьевич"
-                },
-                {
-                    "title":"Информационная безопасность в цифровой экономике. ауд. 11",
-                    "fio":"Гришин Игорь Юрьевич"
-                },
-                {
-                    "title":"Информационная безопасность в цифровой экономике. ауд. 11",
-                    "fio":"Гришин Игорь Юрьевич"
-                },
-                {
-                    "title":"",
-                    "fio":""
-                }                
-            ],
-            "wed":[
-                {
-                    "title":"Межкультурное взаимодействие в современном мире. ауд. 17",
-                    "fio":"Корсунский А.Г"
-                },
-                {
-                    "title":"Проектный менеджмент. ауд. 20",
-                    "fio":"Рындач М.А (Линник И.И.)"
-                },
-                {
-                    "title":"Разработка интернет-приложений и сервисов. ауд. 20",
-                    "fio":"Олейников Николай Николаевич"
-                },
-                {
-                    "title":"",
-                    "fio":""
-                }
-            ],
-            "fri":[
-                {
-                    "title":"Профессионально ориентированный курс иностранного языка. ауд. 37",
-                    "fio":"Осадчая Т.Ю."
-                },
-                {
-                    "title":"Технологии цифрового общества. ауд. 23",
-                    "fio":"Репкин Роман Вячеславович"
-                },
-                {
-                    "title":"",
-                    "fio":""
-                },
-                {
-                    "title":"",
-                    "fio":""
-                }
-            ]
-        }],
-        "odd":[{
-            "tue":[
-                {
-                    "title":"Технология анализа и обработки больших данных (Вig Data). ауд. 11",
-                    "fio":"Четырбок Петр Васильевич"
-                },
-                {
-                    "title":"Межкультурное взаимодействие в современном мире. ауд. 1",
-                    "fio":"Атик А.А"
-                },
-                {
-                    "title":"Технология анализа и обработки больших данных (Вig Data). ауд. 11",
-                    "fio":"Четырбок Петр Васильевич"
-                },
-                {
-                    "title":"Технология анализа и обработки больших данных (Вig Data). ауд. 11",
-                    "fio":"Четырбок Петр Васильевич"
-                }
-            ],
-            "wed":[
-                {
-                    "title":"Проектный менеджмент. ауд. 1",
-                    "fio":"Лукьянова Е.Ю."
-                },
-                {
-                    "title":"Разработка интернет-приложений и сервисов. ауд. 20",
-                    "fio":"Олейников Николай Николаевич"
-                },
-                {
-                    "title":"Разработка интернет-приложений и сервисов. ауд. 20",
-                    "fio":"Олейников Николай Николаевич"
-                },
-                {
-                    "title":"",
-                    "fio":""
-                }
-            ],
-            "fri":[
-                {
-                    "title":"Профессионально ориентированный курс иностранного языка. ауд. 37",
-                    "fio":"Осадчая Т.Ю."
-                },
-                {
-                    "title":"Технологии цифрового общества. ауд. 23",
-                    "fio":"Репкин Роман Вячеславович"
-                },
-                {
-                    "title":"Технологии цифрового общества. ауд. 23",
-                    "fio":"Репкин Роман Вячеславович"
-                },
-                {
-                    "title":"",
-                    "fio":""
-                }
-            ]
-        }]
-    }
-];
+var data =
+{
+    "even": [{
+        "mon": [
+            {
+                "title": "Облачные технологии для бизнеса. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Линник Иван Иванович"
+            },
+            {
+                "title": "Системы поддержки принятия решений. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Таран Виктория Николаевна"
+            },
+            {
+                "title": "Имитационное моделирование бизнес-процессов в цифровой экономике. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Таран Виктория Николаевна"
+            },
+            {
+                "title": "",
+                "fio": ""
+            }
+        ],
+        "tue": [
+            {
+                "title": "Облачные технологии для бизнеса. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Линник Иван Иванович"
+            },
+            {
+                "title": "Современные программные средства разработки бизнес-приложений. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Олейников Николай Николаевич"
+            },
+            {
+                "title": "Системы поддержки принятия решений. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Таран Виктория Николаевна"
+            },
+            {
+                "title": "",
+                "fio": ""
+            }
+        ],
+        "thu": [
+            {
+                "title": "Нейронные сети. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Четырбок Петр Васильевич"
+            },
+            {
+                "title": "Нейронные сети. ауд. 20, ул. Севастопольская 2-а",
+                "fio": "Четырбок Петр Васильевич"
+            },
+            {
+                "title": "Современные программные средства разработки бизнес-приложений. ауд. 20, ул. Севастопольская 2-а",
+                "fio": "Олейников Николай Николаевич"
+            },
+            {
+                "title": "",
+                "fio": ""
+            }
+        ]
+    }],
+    "odd": [{
+        "mon": [
+            {
+                "title": "Облачные технологии для бизнеса. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Линник Иван Иванович"
+            },
+            {
+                "title": "ДПВ: Системы поддержки принятия решений. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Таран Виктория Николаевна"
+            },
+            {
+                "title": "Имитационное моделирование бизнес-процессов в цифровой экономике. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Таран Виктория Николаевна"
+            },
+            {
+                "title": "",
+                "fio": ""
+            }
+        ],
+        "tue": [
+            {
+                "title": "Облачные технологии для бизнеса. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Линник Иван Иванович"
+            },
+            {
+                "title": "Современные программные средства разработки бизнес-приложений. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Олейников Николай Николаевич"
+            },
+            {
+                "title": "ДПВ: Системы поддержки принятия решений. ауд. 23, ул. Севастопольская 2-а",
+                "fio": "Таран Виктория Николаевна"
+            },
+            {
+                "title": "",
+                "fio": ""
+            }
+        ],
+        "thu": [
+            {
+                "title": "ДПВ: Нейронные сети. ауд. 20, ул. Севастопольская 2-а",
+                "fio": "Четырбок Петр Васильевич"
+            },
+            {
+                "title": "ДПВ: Нейронные сети. ауд. 20, ул. Севастопольская 2-а",
+                "fio": "Четырбок Петр Васильевич"
+            },
+            {
+                "title": "Современные программные средства разработки бизнес-приложений. ауд. 20, ул. Севастопольская 2-а",
+                "fio": "Олейников Николай Николаевич"
+            },
+            {
+                "title": "",
+                "fio": ""
+            }
+        ]
+    }]
+};
 
-let evenTable = document.querySelectorAll('#even-table .t-even tbody')[0];
-let tue = evenTable.querySelectorAll("[class*='tue']");
-let wed = evenTable.querySelectorAll("[class*='wed']");
-let fri = evenTable.querySelectorAll("[class*='fri']");
-let weekHtml = [tue, wed, fri];
-
-let oddTable = document.querySelectorAll('#odd-table .t-odd tbody')[0];
-let _tue = oddTable.querySelectorAll("[class*='tue']");
-let _wed = oddTable.querySelectorAll("[class*='wed']");
-let _fri = oddTable.querySelectorAll("[class*='fri']");
-let _weekHtml = [_tue, _wed, _fri];
-
-
-var dataItems = [];
-data.forEach(function(items){
-    dataItems = items;
-});
-
-//weekHtml[0]; день недели
-//weekHtml[0][0]; //день недели, пара по счету
-//dataItems.even[0][weekHtml[0][0].className][2]["title"]; // className][2]["title"] = 2 - это пара
-function showOdd(arrHtml){
-    for(let i = 0; i < arrHtml.length; i++){
-        let weekString = arrHtml[i][0].className;
-        weekString = weekString.substr(weekString, 3);
-        for(let j = 0; j < arrHtml[i].length; j++){
-            arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["odd"][0][weekString][j]["title"];
-            arrHtml[i][j].addEventListener("click", function rec(){
-                arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["odd"][0][weekString][j]["fio"];
-                recTitle(arrHtml[i][j], dataItems["odd"][0][weekString][j]);
-            });
-        }
-    }
-}
-
-function showEven(arrHtml){
-    for(let i = 0; i < arrHtml.length; i++){
-        let weekString = arrHtml[i][0].className;
-        weekString = weekString.substr(weekString, 3);
-        for(let j = 0; j < arrHtml[i].length; j++){
-            arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["even"][0][weekString][j]["title"];
-            arrHtml[i][j].addEventListener("click", function rec(){
-                arrHtml[i][j].querySelector('td:last-child').innerHTML = dataItems["even"][0][weekString][j]["fio"];
-                recTitle(arrHtml[i][j], dataItems["even"][0][weekString][j]);
-            });
-        }
-    }
+var time = {
+    '1': '08:00 - 09:30',
+    '2': '09:45 - 11:15',
+    '3': '11:30 - 13:00',
+    '4': '13:30 - 15:00',
+    '5': '15:15 - 16:45',
+    '6': '17:00 - 18:30',
+    '7': '18:45 - 20:15',
 }
 
 
-function recFio(arrHtml, el){
-    return new Promise((resolve, reject)=>{
-        arrHtml.addEventListener("click", function(){
-            arrHtml.querySelector('td:last-child').innerHTML = el["fio"];
-            resolve(recTitle(arrHtml, el));
-        }, {once: true});
-    })
-}
-
-function recTitle(arrHtml, el){
-    return new Promise((resolve, reject)=>{
-        arrHtml.addEventListener("click", function(){
-            arrHtml.querySelector('td:last-child').innerHTML = el["title"];
-            resolve(recFio(arrHtml, el));
-        }, {once: true});
-    });
-}
-
-showEven(weekHtml);
-showOdd(_weekHtml)
+window.SCHEDULE.getData = () => { return data }
+window.SCHEDULE.getTime = () => { return time }
 
