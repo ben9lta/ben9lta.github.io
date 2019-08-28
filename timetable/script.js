@@ -143,10 +143,10 @@ function createTables(tables) {
             for (let p = 0; p < pairs; p++) {
                 let row = document.querySelectorAll('.' + week[d] + '-' + parity + '-' + p)[0];
                 if (row.firstChild.getAttribute('rowspan') == null) {
-                    row.firstChild.innerText = p;
+                    row.firstChild.innerText = getKeyByValue(dataTime, dataTime[4 + p]);
                     row.children[1].innerText = dataTime[4 + p];
                 } else {
-                    row.children[1].innerText = p
+                    row.children[1].innerText = getKeyByValue(dataTime, dataTime[4 + p]);
                     row.children[2].innerText = dataTime[4 + p];
 
                 }
@@ -346,4 +346,8 @@ function getTablesOfWeek(odd, even) {
 
 function getParityOfTable(table) {
     return table.className.substring(0, table.className.indexOf('-'));
+}
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
 }
