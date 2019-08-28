@@ -351,3 +351,15 @@ function getParityOfTable(table) {
 function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
 }
+
+
+document.addEventListener("DOMContentLoaded", function(){ 
+    let elem = document.getElementsByClassName("yellow"); 
+    if(document.getElementsByClassName('green')[0] === undefined) { 
+        document.getElementsByClassName('yellow')[0].scrollIntoView(true); 
+    } 
+    else 
+    { 
+        document.getElementsByClassName('green')[0].scrollIntoView(); 
+    } 
+});
