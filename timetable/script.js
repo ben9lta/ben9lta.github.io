@@ -55,7 +55,7 @@ function init(days) {
         daysOddTable = [];
         daysEvenTable = [];
         for (let i = 0; i <= days; i++) {
-            for (let j = 0; j < pairs; j++) {
+            for (let j = 1; j <= pairs; j++) {
                 daysOddTable.push(document.querySelectorAll('[class*=' + week[i] + '-odd]')[j]);
                 daysEvenTable.push(document.querySelectorAll('[class*=' + week[i] + '-even]')[j]);
             }
