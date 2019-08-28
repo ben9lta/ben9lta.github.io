@@ -241,10 +241,13 @@ function coloredTable() {
 
     function fillCurrDay() {
         let td = getCurrDay();
-        if (new Date().getDay() > days)
+        if (new Date().getDay() > days){
             td.firstElementChild.classList.add('yellow');
+        }
         else
+        {
             td.firstElementChild.classList.add('green');
+        }
     }
 
     function fillCurrPair(time) {
@@ -292,7 +295,7 @@ function coloredTable() {
     }
 
     function nextPair(tr) {
-        if (tr.children[tr.children.length - 1].innerHTML == '&nbsp;') {
+        if (tr.children[tr.children.length - 1].innerHTML == '&nbsp;' || tr.children[tr.children.length - 1].innerHTML == '') {
             index = getIndexPair(tr);
             let row = getAllPairs();
             index + 1 > row.length ? index = 0 : index += 1;
@@ -352,7 +355,7 @@ function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
 }
 
-
+//Scroll to currday or next
 document.addEventListener("DOMContentLoaded", function(){ 
     let elem = document.getElementsByClassName("yellow"); 
     if(document.getElementsByClassName('green')[0] === undefined) { 
