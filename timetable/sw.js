@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-const CACHE_NAME = 'v26';
-=======
-//const CACHE_NAME = 'v11';
-const CACHE_NAME = 'v15';
->>>>>>> parent of fff32cf... fix
+const CACHE_NAME = 'v27';
 const CACHE_URLS = [
   '/timetable/index.html',
   '/timetable/main.css',
@@ -26,11 +21,7 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('activate', function(event) {
 
-<<<<<<< HEAD
-  var cacheWhitelist = ['v25'];
-=======
-  var cacheWhitelist = ['v14'];
->>>>>>> parent of fff32cf... fix
+  var cacheWhitelist = ['v26'];
 
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
