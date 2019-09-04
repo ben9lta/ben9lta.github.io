@@ -113,8 +113,9 @@ function createTables(tables) {
                     } else {
                         if (c == cols - 1 && p != 0)
                             continue;
-                        else
+                        else {
                             tr.appendChild(td);
+                        } 
                     }
                 }
             }
