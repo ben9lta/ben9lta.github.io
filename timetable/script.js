@@ -34,6 +34,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
     checkWeek(tables);
     coloredTable();
 
+    
+    // console.log(document.querySelectorAll('.'+parity+' tr[class*="0"]'))
+
+    // console.log(document.querySelectorAll('div.even tr[class*="odd-0"] .day-of-week'))
+
 });
 
 function init(days) {
@@ -67,7 +72,6 @@ function init(days) {
 function createTables(tables) {
     let parity, table;
     create();
-
     function create() {
         for (let i = 0; i < tables.length; i++) {
             table = tables[i];
@@ -76,9 +80,11 @@ function createTables(tables) {
             init(days);
             addPairs();
             addSpace();
-            addWeek(i);
+            addWeek(i, parity);
             addNumbers();
             addHeader();
+            addDates(parity)
+
         }
         addSubj(daysOddTable, daysEvenTable)
     }
@@ -132,7 +138,7 @@ function createTables(tables) {
         }
     }
 
-    function addWeek(parity) {
+    function addWeek(index, parity) {
         for (let d = 0; d < days; d++) {
             let day = document.querySelectorAll('.' + table.className + ' [class*="0"]')[d].firstElementChild;
             let div = document.createElement('div');
@@ -140,7 +146,8 @@ function createTables(tables) {
             let b = document.createElement('b');
             b.innerText = week_rus[d];
             day.appendChild(div);
-            div.appendChild(b)
+            div.appendChild(b);
+            
         }
     }
 
@@ -264,14 +271,27 @@ function coloredTable() {
     }
 
 
-    function getPairsByDay() {
-        let cday = getCurrDay();
+    function getPairsByDay(cday = getCurrDay()) {
         let classname = cday.className.substring(0, cday.className.length-1);
         let arr = []
         for(let i = 0; i < pairs; i++) {
             arr.push(document.getElementsByClassName(''+ classname +i)[0])
         }
         return arr;
+    }
+
+    function hasPairs(pairs) {
+        // console.log(pairs.lastElementChild);
+        let arr = pairs.map(function (a) {
+            if(a.lastElementChild.innerText == '' || a.lastElementChild.innerHTML == '&nbsp;') {
+                return false
+            }
+            else return true
+        })
+        if(arr.indexOf(true) !== -1) {
+            return true;
+        }
+        else return false; 
     }
 
     function getTimeOfPair(pair) {
@@ -291,8 +311,9 @@ function coloredTable() {
             else
                 continue;
         }
-      
+        
         let pairs_day = getPairsByDay();
+        // console.log(nextDate())
         let time_pairs = [];
         let start_pairs = [];
         let end_pairs = [];
@@ -307,8 +328,13 @@ function coloredTable() {
             start_pairs.push(spair);
             end_pairs.push(epair);
         }
-        for(let i = 0; i < start_pairs.length; i++) {
 
+        for(let i = 0; i < start_pairs.length; i++) {
+            if(!hasPairs(pairs_day)) {
+                let pairs_next_day = getPairsByDay(getNextDay());
+                return nextPair(pairs_next_day[i])
+            }
+            else            
             if(curr_time >= start_pairs[0] && curr_time < end_pairs[end_pairs.length-1]) {
                 //В пределах занятий. Перемены или пары
                 if(curr_time >= start_pairs[0] && curr_time < end_pairs[i+1]) {
@@ -379,7 +405,7 @@ function coloredTable() {
             index = getIndexPair(tr);
             let row = getAllPairs();
             index + 1 > row.length-1 ? index = 0 : index += 1;
-            nextPair(row[index]);
+            return nextPair(row[index]);
         } else {
             let row = document.getElementsByClassName(tr.className.substring(0, tr.className.lastIndexOf('-')) + '-0')[0];
             if(row.childElementCount !== cols) {
@@ -410,10 +436,87 @@ function coloredTable() {
             return divTable.querySelector('tr.' + week[day-1] + '-' + divTable.className + '-'+index);
         }
     }
+
+    function getNextDay(index = 0) {
+        let day = nextDate().getDay();
+        if (day > days) {
+            let divTable = document.querySelector('h2[class*=yellow]').parentElement;
+            return divTable.querySelector('tr.' + week[0] + '-' + divTable.className + '-'+index);
+        }
+        else {
+            let divTable = document.querySelector('h2[class*=green]').parentElement;
+            return divTable.querySelector('tr.' + week[day-1] + '-' + divTable.className + '-'+index);
+        }
+    }
 }
 
 
-//ОСТАЛОСЬ ДОБАВИТЬ ЧИСЛА
+//ОСТАЛОСЬ ДОБАВИТЬ ДАТЫ
+function getDates(date = currDate()) {
+    // let currdate = currDate();
+    let currdate = date;
+    let monday = new Date();
+    let day = currdate.getDay() == 0 ? 7 : currdate.getDay();
+    let mon = currdate.getDate() - day;
+    monday.setDate(mon);
+    let arr = [];
+    if(monday.getDay() == 0) {
+        
+        arr.push(new Date(monday.setDate(monday.getDate()+1)))
+    }
+    for(let i = 1; i < days; i++) {
+        
+        arr.push(new Date(monday.setDate(monday.getDate()+1)))
+    }
+    arr.push(new Date(monday.setDate(arr[0].getDate() + 7)));
+    return arr;
+}
+
+function addDates(parity) {
+    dates = getDates();
+    dates2 = getDates(dates[dates.length-1])
+    if(getWeekNum() % 2 == 0) {
+        let tr = document.querySelectorAll('div.'+parity+' tr[class*="'+parity+'-0"] .day-of-week');
+        if(parity == 'even') {
+            for(let i = 0; i < tr.length; i++){
+                let span = document.createElement('span');
+                span.innerText = dates[i].toLocaleDateString();
+                tr[i].appendChild(span);
+            }
+        } 
+        else
+        {
+            // console.log(dates2)
+            for(let i = 0; i < tr.length; i++){
+                let span = document.createElement('span');
+                span.innerText = dates2[i].toLocaleDateString();
+                tr[i].appendChild(span);
+            }
+        } 
+    }
+    else 
+    {
+        // console.log('odd')
+        let tr = document.querySelectorAll('div.'+parity+' tr[class*="'+parity+'-0"] .day-of-week');
+        if(parity != 'even') {
+            for(let i = 0; i < tr.length; i++){
+                let span = document.createElement('span');
+                span.innerText = dates[i].toLocaleDateString();
+                tr[i].appendChild(span);
+            }
+        } 
+        else
+        {
+            // console.log(dates2)
+            for(let i = 0; i < tr.length; i++){
+                let span = document.createElement('span');
+                span.innerText = dates2[i].toLocaleDateString();
+                tr[i].appendChild(span);
+            }
+        } 
+    }
+
+}
 
 /*==============================================*/
 
@@ -427,9 +530,16 @@ function getWeekNum() {
 }
 
 function currDate() {
-    // let date = new Date().setDate(6);
+    // let date = new Date().setDate(5);
     // return new Date(date);
     return new Date
+}
+
+function nextDate(curr_date = currDate()) {
+    let date = new Date(curr_date);
+    date.setDate(date.getDate() + 1)
+    return new Date(date);
+    // return new Date
 }
 
 
@@ -473,17 +583,24 @@ function arrayDaysInWeek(parity) {
 
 // Scroll to currday or next
 document.addEventListener('readystatechange', function() {
-
     if(document.readyState == 'complete') {
         if(document.querySelector('tr.yellow')){
             setTimeout(() => {
-                document.querySelector('tr.yellow').scrollIntoView({behavior: "smooth"})
+                let tr = document.querySelector('tr.yellow');
+                let len = tr.classList[0].indexOf('-')
+                let day = tr.classList[0].substring(0, len)
+                let parity = tr.parentElement.parentElement.className;
+                document.getElementsByClassName(''+day+'-'+parity +'-'+0)[0].scrollIntoView({behavior: "smooth"})
             }, 100);
         }
         else 
         {
             setTimeout(() => {
-                document.querySelector('tr.green').scrollIntoView({behavior: "smooth"})
+                let tr = document.querySelector('tr.green');
+                let len = tr.classList[0].indexOf('-')
+                let day = tr.classList[0].substring(0, len)
+                let parity = tr.parentElement.parentElement.className;
+                document.getElementsByClassName(''+day+'-'+parity +'-'+0)[0].scrollIntoView({behavior: "smooth"})
             }, 100);
         }
         
