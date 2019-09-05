@@ -1,4 +1,4 @@
-const CACHE_NAME = 'v27';
+const CACHE_NAME = 'v28';
 const CACHE_URLS = [
   '/timetable/index.html',
   '/timetable/main.css',
@@ -21,7 +21,7 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('activate', function(event) {
 
-  var cacheWhitelist = ['v26'];
+  var cacheWhitelist = ['v27'];
 
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
