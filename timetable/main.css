@@ -64,6 +64,19 @@ tr.space {
     width: 100%;
 }
 
+
+div.day-of-week {
+    width: 100%;
+    height: 100%;
+    display: inline-flex;
+    justify-content: space-evenly;
+}
+
+tr td div.day-of-week b, tr td div.day-of-week span {
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+}
+
 @media screen and (max-width: 399.98px){
     .even-table tr:not([class="space"]) td, .odd-table tr:not([class="space"]) td {
         box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.41);

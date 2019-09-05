@@ -1,20 +1,20 @@
-if('serviceWorker' in navigator){
-    // Register service worker
-    navigator.serviceWorker.register('/timetable/sw.js', { scope: '/timetable/'}).then(function(reg){
-        console.log("SW registration succeeded. Scope is "+reg.scope);
-    }).catch(function(err){
-        console.error("SW registration failed with error "+err);
-    });
-}
+// if('serviceWorker' in navigator){
+//     // Register service worker
+//     navigator.serviceWorker.register('/timetable/sw.js', { scope: '/timetable/'}).then(function(reg){
+//         console.log("SW registration succeeded. Scope is "+reg.scope);
+//     }).catch(function(err){
+//         console.error("SW registration failed with error "+err);
+//     });
+// }
 
-let week = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
-let week_rus = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-let header = ['День недели', 'Пара', 'Время', 'Инфо']
+const week = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+const week_rus = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+const header = ['День недели', 'Пара', 'Время', 'Инфо']
 let daysOddTable = [], daysEvenTable = [];
 let dataItems = {}, dataTime = {};
 
 let oddTable, evenTable;
-let days = 5, pairs = 4, cols = 4;
+const days = 6, pairs = 4, cols = 4, start_pairs = 4;
 
 
 document.addEventListener("DOMContentLoaded", function (event) {
@@ -54,7 +54,7 @@ function init(days) {
     function initDaysOfTables(days) {
         daysOddTable = [];
         daysEvenTable = [];
-        for (let i = 0; i <= days; i++) {
+        for (let i = 0; i < days; i++) {
             for (let j = 0; j < pairs; j++) {
                 daysOddTable.push(document.querySelectorAll('[class*=' + week[i] + '-odd]')[j]);
                 daysEvenTable.push(document.querySelectorAll('[class*=' + week[i] + '-even]')[j]);
@@ -72,12 +72,11 @@ function createTables(tables) {
         for (let i = 0; i < tables.length; i++) {
             table = tables[i];
             parity = getParityOfTable(table);
-
             createWeek();
             init(days);
             addPairs();
             addSpace();
-            addWeek();
+            addWeek(i);
             addNumbers();
             addHeader();
         }
@@ -85,7 +84,7 @@ function createTables(tables) {
     }
 
     function createWeek() {
-        for (let d = -1; d <= days; d++) {
+        for (let d = -1; d < days; d++) {
             for (let p = 0; p < pairs; p++) {
                 let tr = document.createElement('tr');
                 table.appendChild(tr);
@@ -101,13 +100,14 @@ function createTables(tables) {
     }
 
     function addPairs() {
-        for (let d = 0; d <= days; d++) {
+        for (let d = 0; d < days; d++) {
             for (let p = 0; p < pairs; p++) {
                 for (let c = 0; c < cols; c++) {
                     let tr = document.querySelectorAll('tr.' + week[d] + '-' + parity + '-' + p)[0];
                     let td = document.createElement('td');
                     td.innerHTML = '&nbsp;';
                     if (p == 0 && c == 0) {
+                        td.innerHTML ='';
                         tr.appendChild(td);
                         tr.children[0].rowSpan = '4';
                     } else {
@@ -132,23 +132,28 @@ function createTables(tables) {
         }
     }
 
-    function addWeek() {
-        for (let d = 0; d <= days; d++) {
+    function addWeek(parity) {
+        for (let d = 0; d < days; d++) {
             let day = document.querySelectorAll('.' + table.className + ' [class*="0"]')[d].firstElementChild;
-            day.innerText = week_rus[d];
+            let div = document.createElement('div');
+            div.classList.add('day-of-week')
+            let b = document.createElement('b');
+            b.innerText = week_rus[d];
+            day.appendChild(div);
+            div.appendChild(b)
         }
     }
 
     function addNumbers() {
-        for (let d = 0; d <= days; d++) {
+        for (let d = 0; d < days; d++) {
             for (let p = 0; p < pairs; p++) {
                 let row = document.querySelectorAll('.' + week[d] + '-' + parity + '-' + p)[0];
                 if (row.firstChild.getAttribute('rowspan') == null) {
-                    row.firstChild.innerText = getKeyByValue(dataTime, dataTime[4 + p]);
-                    row.children[1].innerText = dataTime[4 + p];
+                    row.firstChild.innerText = getKeyByValue(dataTime, dataTime[start_pairs + p]);
+                    row.children[1].innerText = dataTime[start_pairs + p];
                 } else {
-                    row.children[1].innerText = getKeyByValue(dataTime, dataTime[4 + p]);
-                    row.children[2].innerText = dataTime[4 + p];
+                    row.children[1].innerText = getKeyByValue(dataTime, dataTime[start_pairs + p]);
+                    row.children[2].innerText = dataTime[start_pairs + p];
 
                 }
             }
@@ -236,13 +241,14 @@ function checkWeek(tables) {
 
 function coloredTable() {
     fillCurrDay();
-    let currTime = checkCurrTime();
-    fillCurrPair(currTime);
+    let curr_time = getCurrTime();
+    fillCurrPair();
     // checkPair(getCurrDay());
 
     function fillCurrDay() {
         let td = getCurrDay();
-        if (new Date().getDay() > days){
+        if (currDate().getDay() > days){
+            
             td.firstElementChild.classList.add('yellow');
         }
         else
@@ -251,31 +257,103 @@ function coloredTable() {
         }
     }
 
-    function fillCurrPair(time) {
-        let strTime = document.querySelector('.mon-odd-0').children[document.querySelector('.mon-odd-0').children.length - 2].innerText;
+    function splitPairsTime(pair_time) {
+        start = pair_time.substring(0, pair_time.indexOf(' '));
+        end = pair_time.substring(pair_time.lastIndexOf(' ') + 1);
+        return [start, end];
+    }
+
+
+    function getPairsByDay() {
+        let cday = getCurrDay();
+        let classname = cday.className.substring(0, cday.className.length-1);
+        let arr = []
+        for(let i = 0; i < pairs; i++) {
+            arr.push(document.getElementsByClassName(''+ classname +i)[0])
+        }
+        return arr;
+    }
+
+    function getTimeOfPair(pair) {
+        return pair.lastElementChild.previousSibling.innerText;
+    }
+
+    function fillCurrPair() {
+
+        let fptime = document.querySelector('.mon-odd-0').children[document.querySelector('.mon-odd-0').children.length - 2].innerText;
         dataTime = Object.values(dataTime);
         let j = 0;
         for (let i = 0; i < dataTime.length; i++) {
-            if (dataTime[i] == strTime) {
+            if (dataTime[i] == fptime) {
                 j = i;
                 break;
             }
             else
                 continue;
         }
-
-        
-        let a = dataTime[j].substring(0, dataTime[j].indexOf(' ')); //Начало пары
-        let b = dataTime[j].substring(dataTime[j].lastIndexOf(' ') + 1); //Конец пары
-        let row = getCurrDay();
-        if (time > dataTime[j] && time < dataTime[j + 1] && time < b) {
-            //Если текущее время находится в пределах времени пары, то красить зеленым
-            thisPair(row);
+      
+        let pairs_day = getPairsByDay();
+        let time_pairs = [];
+        let start_pairs = [];
+        let end_pairs = [];
+        getTimeOfPair(pairs_day[0]);
+        for(let i = 0; i < pairs_day.length; i++) {
+            time_pairs.push(pairs_day[i].lastElementChild.previousSibling.innerText);
         }
-        else {
-            //Если текущее время не находится в рамках пары, то некст
-            document.querySelectorAll('tr[class*=' + row.className + '] ~ tr')[0];
-            nextPair(row);
+
+        for(let i = 0; i < time_pairs.length; i++) {
+            let spair = splitPairsTime(time_pairs[i])[0];
+            let epair = splitPairsTime(time_pairs[i])[1];
+            start_pairs.push(spair);
+            end_pairs.push(epair);
+        }
+        for(let i = 0; i < start_pairs.length; i++) {
+
+            if(curr_time >= start_pairs[0] && curr_time < end_pairs[end_pairs.length-1]) {
+                //В пределах занятий. Перемены или пары
+                if(curr_time >= start_pairs[0] && curr_time < end_pairs[i+1]) {
+                    //Перемены или пары
+                    if(curr_time >= start_pairs[i] && curr_time < end_pairs[i]) {
+                        //Пара
+                        console.log('Пара')
+                        return thisPair(pairs_day[i])
+                    }
+                    
+                    if(curr_time >= end_pairs[i] && curr_time < start_pairs[i+1]) {
+                        //Перемена
+                        console.log('Перемена')
+                        return nextPair(pairs_day[i+1])
+                    }
+                    
+                }
+                else
+                {
+                    if(pairs_day[i].lastElementChild.innerHTML == '&nbsp;' || 
+                    pairs_day[i].lastElementChild.innerText == ''){
+                        // console.log(curr_time, start_pairs[0], end_pairs[end_pairs.length-1])
+                        return nextPair(pairs_day[i])
+                    }
+                    continue;
+                }
+                
+                
+            }
+            else 
+            {                
+                if(curr_time < start_pairs[0]) 
+                {
+                    //Будут пары
+                    console.log('скоро пары')
+                    return nextPair(pairs_day[0])
+                }
+                if(curr_time >= end_pairs[end_pairs.length-1])
+                {
+                    //Пары закончились
+                    console.log('пары закончились')
+                    return nextPair(pairs_day[pairs_day.length-1])
+                }
+            }
+
         }
 
     }
@@ -285,6 +363,7 @@ function coloredTable() {
     }
 
     function getIndexPair(tr){
+
         let rows = getAllPairs();
         arr = Array.from(rows);
         let index = arr.indexOf(tr);
@@ -299,48 +378,58 @@ function coloredTable() {
         if (tr.children[tr.children.length - 1].innerHTML == '&nbsp;' || tr.children[tr.children.length - 1].innerHTML == '') {
             index = getIndexPair(tr);
             let row = getAllPairs();
-            index + 1 > row.length ? index = 0 : index += 1;
+            index + 1 > row.length-1 ? index = 0 : index += 1;
             nextPair(row[index]);
         } else {
             let row = document.getElementsByClassName(tr.className.substring(0, tr.className.lastIndexOf('-')) + '-0')[0];
-            row.children[0].classList.add('yellow');
+            if(row.childElementCount !== cols) {
+                row.children[0].classList.add('yellow');
+            }
             tr.classList.add('yellow');
         }
     }
 
-    function checkCurrTime() {
-        let currTime = new Date();
+    function getCurrTime() {
+        let currTime = currDate();
         let h = currTime.getHours() < 10 ? '0' + currTime.getHours() : currTime.getHours();
         let m = currTime.getMinutes() < 10 ? '0' + currTime.getMinutes() : currTime.getMinutes();
         let string = h + ':' + m;
+        // string = '13:30'
+        console.log(string)
         return string;
     }
 
-    function getCurrDay() {
-        let day = new Date().getDay();
+    function getCurrDay(index = 0) {
+        let day = currDate().getDay();
         if (day > days) {
             let divTable = document.querySelector('h2[class*=yellow]').parentElement;
-            return divTable.querySelector('tr.' + week[0] + '-' + divTable.className + '-0');
+            return divTable.querySelector('tr.' + week[0] + '-' + divTable.className + '-'+index);
         }
         else {
             let divTable = document.querySelector('h2[class*=green]').parentElement;
-            return divTable.querySelector('tr.' + week[day-1] + '-' + divTable.className + '-0');
+            return divTable.querySelector('tr.' + week[day-1] + '-' + divTable.className + '-'+index);
         }
     }
 }
 
 
-
+//ОСТАЛОСЬ ДОБАВИТЬ ЧИСЛА
 
 /*==============================================*/
 
 function getWeekNum() {
     let date, newYear, newYearDay, wNum;
-    date = new Date(); // сегодняшнее число
+    date = currDate(); // сегодняшнее число
     newYear = new Date(date.getFullYear(), 0, 1); //Год Месяц число
     newYearDay = newYear.getDay(); //день недели начала года
     wNum = Math.floor(((date.getTime() - newYear.getTime()) / 1000 / 60 / 60 / 24 + newYearDay) / 7);// (текущий день года + день начала недели) / неделю = неделя текущего дня
     return wNum + 1;
+}
+
+function currDate() {
+    // let date = new Date().setDate(6);
+    // return new Date(date);
+    return new Date
 }
 
 
@@ -356,14 +445,49 @@ function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
 }
 
-//Scroll to currday or next
-document.addEventListener("DOMContentLoaded", function(){ 
-    let elem = document.getElementsByClassName("yellow"); 
-    if(document.getElementsByClassName('green')[0] === undefined) { 
-        document.getElementsByClassName('yellow')[0].scrollIntoView(true); 
+function arrayDaysInWeek(parity) {
+    let arraydate = [];
+    let now = currDate();
+    let dayofweek = now.getDay();
+    if(dayofweek !== 1) {
+        now.setDate(now.getDate() - (dayofweek > 1 ? dayofweek : dayofweek - getDays()));
+    }
+
+    for(let i = 0, d = days; i < 14; i++, d--) {               
+        if(d == 0){
+            d = 7;
+        } else
+        if(d > days){
+            continue;
+        } else {
+            arraydate.push(new Date(now.getFullYear(), now.getMonth(), now.getDate() + i));
+        }
+    }
+    let result = arraydate.map((a,b) => new Date(a).toLocaleDateString());
+    if(parity === 0) {
+        return result.splice(0, getDays());
+    } else {
+        return result.splice(getDays());
+    }
+}
+
+// Scroll to currday or next
+document.addEventListener('readystatechange', function() {
+
+    if(document.readyState == 'complete') {
+        if(document.querySelector('tr.yellow')){
+            setTimeout(() => {
+                document.querySelector('tr.yellow').scrollIntoView({behavior: "smooth"})
+            }, 100);
+        }
+        else 
+        {
+            setTimeout(() => {
+                document.querySelector('tr.green').scrollIntoView({behavior: "smooth"})
+            }, 100);
+        }
+        
+       
     } 
-    else 
-    { 
-        document.getElementsByClassName('green')[0].scrollIntoView(); 
-    } 
-});
+})
+
