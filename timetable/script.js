@@ -1,11 +1,11 @@
-if('serviceWorker' in navigator){
-    // Register service worker
-    navigator.serviceWorker.register('/timetable/sw.js', { scope: '/timetable/'}).then(function(reg){
-        console.log("SW registration succeeded. Scope is "+reg.scope);
-    }).catch(function(err){
-        console.error("SW registration failed with error "+err);
-    });
-}
+// if('serviceWorker' in navigator){
+//     // Register service worker
+//     navigator.serviceWorker.register('/timetable/sw.js', { scope: '/timetable/'}).then(function(reg){
+//         console.log("SW registration succeeded. Scope is "+reg.scope);
+//     }).catch(function(err){
+//         console.error("SW registration failed with error "+err);
+//     });
+// }
 
 const week = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 const week_rus = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
@@ -329,9 +329,12 @@ function coloredTable() {
             end_pairs.push(epair);
         }
 
+        
         for(let i = 0; i < start_pairs.length; i++) {
             if(!hasPairs(pairs_day)) {
+                // console.log('qwe')
                 let pairs_next_day = getPairsByDay(getNextDay());
+                // console.log(getNextDay())
                 return nextPair(pairs_next_day[i])
             }
             else            
@@ -361,7 +364,6 @@ function coloredTable() {
                     }
                     continue;
                 }
-                
                 
             }
             else 
@@ -438,7 +440,7 @@ function coloredTable() {
     }
 
     function getNextDay(index = 0) {
-        let day = nextDate().getDay();
+        let day = nextDate().getDay() == 0 ? 7 : nextDate().getDay();
         if (day > days) {
             let divTable = document.querySelector('h2[class*=yellow]').parentElement;
             return divTable.querySelector('tr.' + week[0] + '-' + divTable.className + '-'+index);
@@ -532,12 +534,14 @@ function getWeekNum() {
 function currDate() {
     // let date = new Date().setDate(5);
     // return new Date(date);
-    return new Date
+    let date = new Date();
+    return date
 }
 
 function nextDate(curr_date = currDate()) {
     let date = new Date(curr_date);
-    date.setDate(date.getDate() + 1)
+    let day = date.getDate() == 0 ? 7 : date.getDate();
+    date.setDate(day + 1)
     return new Date(date);
     // return new Date
 }
