@@ -254,14 +254,13 @@ function coloredTable() {
 
     function fillCurrDay() {
         let td = getCurrDay();
-        if (currDate().getDay() > days){
-            
+        if (currDate().getDay() > days || currDate().getDay() == 0){
             td.firstElementChild.classList.add('yellow');
         }
         else
         {
             td.firstElementChild.classList.add('green');
-        }
+        }       
     }
 
     function splitPairsTime(pair_time) {
@@ -272,6 +271,9 @@ function coloredTable() {
 
 
     function getPairsByDay(cday = getCurrDay()) {
+        if(!cday) {
+            cday = getNextDay()
+        }
         let classname = cday.className.substring(0, cday.className.length-1);
         let arr = []
         for(let i = 0; i < pairs; i++) {
@@ -295,6 +297,7 @@ function coloredTable() {
     }
 
     function getTimeOfPair(pair) {
+
         return pair.lastElementChild.previousSibling.innerText;
     }
 
@@ -428,7 +431,7 @@ function coloredTable() {
     }
 
     function getCurrDay(index = 0) {
-        let day = currDate().getDay();
+        let day = currDate().getDay() == 0 ? nextDate().getDay() : currDate().getDay();
         if (day > days) {
             let divTable = document.querySelector('h2[class*=yellow]').parentElement;
             return divTable.querySelector('tr.' + week[0] + '-' + divTable.className + '-'+index);
@@ -499,23 +502,45 @@ function addDates(parity) {
     else 
     {
         // console.log('odd')
-        let tr = document.querySelectorAll('div.'+parity+' tr[class*="'+parity+'-0"] .day-of-week');
-        if(parity != 'even') {
-            for(let i = 0; i < tr.length; i++){
-                let span = document.createElement('span');
-                span.innerText = dates[i].toLocaleDateString();
-                tr[i].appendChild(span);
-            }
-        } 
-        else
+        if(currDate().getDay() == 0) {
+            let tr = document.querySelectorAll('div.'+parity+' tr[class*="'+parity+'-0"] .day-of-week');
+            if(parity == 'even') {
+                for(let i = 0; i < tr.length; i++){
+                    let span = document.createElement('span');
+                    span.innerText = dates[i].toLocaleDateString();
+                    tr[i].appendChild(span);
+                }
+            } 
+            else
+            {
+                // console.log(dates2)
+                for(let i = 0; i < tr.length; i++){
+                    let span = document.createElement('span');
+                    span.innerText = dates2[i].toLocaleDateString();
+                    tr[i].appendChild(span);
+                }
+            } 
+        }
+        else 
         {
-            // console.log(dates2)
-            for(let i = 0; i < tr.length; i++){
-                let span = document.createElement('span');
-                span.innerText = dates2[i].toLocaleDateString();
-                tr[i].appendChild(span);
-            }
-        } 
+            let tr = document.querySelectorAll('div.'+parity+' tr[class*="'+parity+'-0"] .day-of-week');
+            if(parity != 'even') {
+                for(let i = 0; i < tr.length; i++){
+                    let span = document.createElement('span');
+                    span.innerText = dates[i].toLocaleDateString();
+                    tr[i].appendChild(span);
+                }
+            } 
+            else
+            {
+                // console.log(dates2)
+                for(let i = 0; i < tr.length; i++){
+                    let span = document.createElement('span');
+                    span.innerText = dates2[i].toLocaleDateString();
+                    tr[i].appendChild(span);
+                }
+            } 
+        }
     }
 
 }
