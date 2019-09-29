@@ -231,8 +231,7 @@ function checkWeek(tables) {
         odd.className = 'odd-yellow';
         even.style = 'color: rgb(40, 197, 22); text-decoration: underline;';
         even.className = 'even-green';
-
-
+        
     }
     else if (week % 2 != 0) {
         //odd - нечетная неделя
@@ -243,24 +242,31 @@ function checkWeek(tables) {
         odd.className = 'odd-green';
         even.style = 'color: #efcc00;';
         even.className = 'even-yellow';
+        // console.log(getCurrDay())
     }
 }
+
 
 function coloredTable() {
     fillCurrDay();
     let curr_time = getCurrTime();
     fillCurrPair();
-    // checkPair(getCurrDay());
 
     function fillCurrDay() {
         let td = getCurrDay();
-        if (currDate().getDay() > days || currDate().getDay() == 0){
-            td.firstElementChild.classList.add('yellow');
-        }
-        else
-        {
+        let c_day = currDate().getDay();
+        c_day = c_day == 0 ? 7 : c_day;
+        // console.log(c_day)
+        // if (c_day > days){
+        //     td.firstElementChild.classList.add('yellow');
+        // }
+        // else
+        // {
+        //     td.firstElementChild.classList.add('green');
+        // }       
+        if(c_day <= days) {
             td.firstElementChild.classList.add('green');
-        }       
+        }
     }
 
     function splitPairsTime(pair_time) {
@@ -283,7 +289,6 @@ function coloredTable() {
     }
 
     function hasPairs(pairs) {
-        // console.log(pairs.lastElementChild);
         let arr = pairs.map(function (a) {
             if(a.lastElementChild.innerText == '' || a.lastElementChild.innerHTML == '&nbsp;') {
                 return false
@@ -316,7 +321,6 @@ function coloredTable() {
         }
         
         let pairs_day = getPairsByDay();
-        // console.log(nextDate())
         let time_pairs = [];
         let start_pairs = [];
         let end_pairs = [];
@@ -332,17 +336,29 @@ function coloredTable() {
             end_pairs.push(epair);
         }
 
-        
+        c_day = currDate().getDay();
+        c_day = c_day == 0 ? 7 : c_day;
         for(let i = 0; i < start_pairs.length; i++) {
+            
+            if(c_day > days) { 
+                let divTable = document.querySelector('h2[class*=yellow]').parentElement;
+                let next_week = divTable.querySelector('tr.' + week[0] + '-' + divTable.className + '-0');
+                return nextPair(next_week);
+            }
             if(!hasPairs(pairs_day)) {
-                // console.log('qwe')
+                if(c_day == days) { 
+                    let divTable = document.querySelector('h2[class*=yellow]').parentElement;
+                    let next_week = divTable.querySelector('tr.' + week[0] + '-' + divTable.className + '-0');
+                    return nextPair(next_week);
+                }
+
                 let pairs_next_day = getPairsByDay(getNextDay());
-                // console.log(getNextDay())
                 return nextPair(pairs_next_day[i])
             }
             else            
             if(curr_time >= start_pairs[0] && curr_time < end_pairs[end_pairs.length-1]) {
                 //В пределах занятий. Перемены или пары
+                
                 if(curr_time >= start_pairs[0] && curr_time < end_pairs[i+1]) {
                     //Перемены или пары
                     if(curr_time >= start_pairs[i] && curr_time < end_pairs[i]) {
@@ -406,6 +422,7 @@ function coloredTable() {
     }
 
     function nextPair(tr) {
+        // console.log(tr);
         if (tr.children[tr.children.length - 1].innerHTML == '&nbsp;' || tr.children[tr.children.length - 1].innerHTML == '') {
             index = getIndexPair(tr);
             let row = getAllPairs();
@@ -417,6 +434,7 @@ function coloredTable() {
                 row.children[0].classList.add('yellow');
             }
             tr.classList.add('yellow');
+            return;
         }
     }
 
@@ -431,7 +449,8 @@ function coloredTable() {
     }
 
     function getCurrDay(index = 0) {
-        let day = currDate().getDay() == 0 ? nextDate().getDay() : currDate().getDay();
+        let day = currDate().getDay();
+        day = day == 0 ? nextDate().getDay() : day;
         if (day > days) {
             let divTable = document.querySelector('h2[class*=yellow]').parentElement;
             return divTable.querySelector('tr.' + week[0] + '-' + divTable.className + '-'+index);
@@ -443,20 +462,21 @@ function coloredTable() {
     }
 
     function getNextDay(index = 0) {
-        let day = nextDate().getDay() == 0 ? 7 : nextDate().getDay();
-        if (day > days) {
+        let n_day = nextDate().getDay();
+        n_day = n_day == 0 ? 7 : n_day;
+        if (n_day > days) {
             let divTable = document.querySelector('h2[class*=yellow]').parentElement;
             return divTable.querySelector('tr.' + week[0] + '-' + divTable.className + '-'+index);
         }
         else {
+            // console.log('qwe')
             let divTable = document.querySelector('h2[class*=green]').parentElement;
-            return divTable.querySelector('tr.' + week[day-1] + '-' + divTable.className + '-'+index);
+            return divTable.querySelector('tr.' + week[n_day-1] + '-' + divTable.className + '-'+index);
         }
     }
 }
 
 
-//ОСТАЛОСЬ ДОБАВИТЬ ДАТЫ
 function getDates(date = currDate()) {
     // let currdate = currDate();
     let currdate = date;
@@ -501,13 +521,13 @@ function addDates(parity) {
     }
     else 
     {
-        // console.log('odd')
         if(currDate().getDay() == 0) {
             let tr = document.querySelectorAll('div.'+parity+' tr[class*="'+parity+'-0"] .day-of-week');
+            // console.log(tr);
             if(parity == 'even') {
                 for(let i = 0; i < tr.length; i++){
                     let span = document.createElement('span');
-                    span.innerText = dates[i].toLocaleDateString();
+                    span.innerText = dates2[i].toLocaleDateString();
                     tr[i].appendChild(span);
                 }
             } 
@@ -516,7 +536,7 @@ function addDates(parity) {
                 // console.log(dates2)
                 for(let i = 0; i < tr.length; i++){
                     let span = document.createElement('span');
-                    span.innerText = dates2[i].toLocaleDateString();
+                    span.innerText = dates[i].toLocaleDateString();
                     tr[i].appendChild(span);
                 }
             } 
@@ -547,17 +567,21 @@ function addDates(parity) {
 
 /*==============================================*/
 
+
 function getWeekNum() {
     let date, newYear, newYearDay, wNum;
     date = currDate(); // сегодняшнее число
     newYear = new Date(date.getFullYear(), 0, 1); //Год Месяц число
     newYearDay = newYear.getDay(); //день недели начала года
     wNum = Math.floor(((date.getTime() - newYear.getTime()) / 1000 / 60 / 60 / 24 + newYearDay) / 7);// (текущий день года + день начала недели) / неделю = неделя текущего дня
-    return wNum + 1;
+    if(date.getDay() == 0)
+        return wNum;
+    else
+        return wNum+1;
 }
 
 function currDate() {
-    // let date = new Date().setDate(5);
+    // let date = new Date().setDate(23);
     // return new Date(date);
     let date = new Date();
     return date
@@ -571,6 +595,12 @@ function nextDate(curr_date = currDate()) {
     // return new Date
 }
 
+function getParityOfWeek() {
+    let week = getWeekNum();
+    if (week % 2 == 0) {
+        return 'even'
+    } else return 'odd';
+}
 
 function getTablesOfWeek(odd, even) {
     return [odd, even]
