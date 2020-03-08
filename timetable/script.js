@@ -574,7 +574,7 @@ function getWeekNum() {
     newYear = new Date(date.getFullYear(), 0, 1); //Год Месяц число
     newYearDay = newYear.getDay(); //день недели начала года
     wNum = Math.floor(((date.getTime() - newYear.getTime()) / 1000 / 60 / 60 / 24 + newYearDay) / 7);// (текущий день года + день начала недели) / неделю = неделя текущего дня
-    if(date.getDay() == 0)
+    if(date.getDay() == 1)
         return wNum;
     else
         return wNum+1;
