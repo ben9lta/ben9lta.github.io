@@ -222,7 +222,7 @@ function addSubj(daysOddTable, daysEvenTable) {
 
 function checkWeek(tables) {
     let week = getWeekNum();
-    if (week % 2 == 0) {
+    if (week % 2 != 0) {
         //even - четная неделя
         document.getElementsByTagName('main')[0].style = "flex-direction: column-reverse;";//Если четная, то нечетную меняем местами с четной
         let odd = tables[0].parentElement.getElementsByTagName('h2')[0];
@@ -500,7 +500,7 @@ function getDates(date = currDate()) {
 function addDates(parity) {
     dates = getDates();
     dates2 = getDates(dates[dates.length-1])
-    if(getWeekNum() % 2 == 0) {
+    if(getWeekNum() % 2 != 0) {
         let tr = document.querySelectorAll('div.'+parity+' tr[class*="'+parity+'-0"] .day-of-week');
         if(parity == 'even') {
             for(let i = 0; i < tr.length; i++){
@@ -574,14 +574,16 @@ function getWeekNum() {
     newYear = new Date(date.getFullYear(), 0, 1); //Год Месяц число
     newYearDay = newYear.getDay(); //день недели начала года
     wNum = Math.floor(((date.getTime() - newYear.getTime()) / 1000 / 60 / 60 / 24 + newYearDay) / 7);// (текущий день года + день начала недели) / неделю = неделя текущего дня
-    if(date.getDay() == 1)
+    // console.log(new Date(date).getDay())
+    // console.error(wNum)
+    if(date.getDay() == 0)
         return wNum;
     else
         return wNum+1;
 }
 
 function currDate() {
-    // let date = new Date().setDate(23);
+    // let date = new Date().setDate(19);
     // return new Date(date);
     let date = new Date();
     return date
@@ -597,7 +599,8 @@ function nextDate(curr_date = currDate()) {
 
 function getParityOfWeek() {
     let week = getWeekNum();
-    if (week % 2 == 0) {
+    // console.log(week);
+    if (week % 2 != 0) {
         return 'even'
     } else return 'odd';
 }
