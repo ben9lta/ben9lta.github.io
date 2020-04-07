@@ -1,6 +1,4 @@
-window.global_caches_names = 0;
-window.global_caches_key = 0;
-const CACHE_NAME = 'v47';
+const CACHE_NAME = 'v48';
 const CACHE_URLS = [
   '/timetable/index.html',
   '/timetable/main.css',
@@ -23,14 +21,12 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('activate', function(event) {
 
-  var cacheWhitelist = ['v46'];
+  var cacheWhitelist = ['v47'];
 
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(
         cacheNames.map(function(key) {
-          window.global_caches_names = cacheNames;
-          window.global_caches_key = key;
           if (cacheWhitelist.indexOf(key) === -1) {
             return caches.delete(key);
           }
