@@ -1,3 +1,5 @@
+window.global_caches_names = 0;
+window.global_caches_key = 0;
 const CACHE_NAME = 'v46';
 const CACHE_URLS = [
   '/timetable/index.html',
