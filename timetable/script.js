@@ -221,28 +221,25 @@ function addSubj(daysOddTable, daysEvenTable) {
 }
 
 function checkWeek(tables) {
-    let week = getWeekNum();
-    if (week % 2 != 0) {
+    let odd = tables[0].parentElement.getElementsByTagName('h2')[0];
+    let even = tables[1].parentElement.getElementsByTagName('h2')[0];
+
+    if (getParityOfWeek()) {
         //even - четная неделя
         document.getElementsByTagName('main')[0].style = "flex-direction: column-reverse;";//Если четная, то нечетную меняем местами с четной
-        let odd = tables[0].parentElement.getElementsByTagName('h2')[0];
-        let even = tables[1].parentElement.getElementsByTagName('h2')[0];
         odd.style = 'color: #efcc00;';
         odd.className = 'odd-yellow';
         even.style = 'color: rgb(40, 197, 22); text-decoration: underline;';
         even.className = 'even-green';
-        
     }
-    else {
+    else 
+    {
         //odd - нечетная неделя
         document.getElementsByTagName('main')[0].style = "flex-direction: column;";//Если нечетная, то меняем местами с четной
-        let odd = tables[0].parentElement.getElementsByTagName('h2')[0];
-        let even = tables[1].parentElement.getElementsByTagName('h2')[0];
         odd.style = 'color: rgb(40, 197, 22); text-decoration: underline;';
         odd.className = 'odd-green';
         even.style = 'color: #efcc00;';
         even.className = 'even-yellow';
-        // console.log(getCurrDay())
     }
 }
 
@@ -500,7 +497,7 @@ function getDates(date = currDate()) {
 function addDates(parity) {
     dates = getDates();
     dates2 = getDates(dates[dates.length-1])
-    if(getWeekNum() % 2 != 0) {
+    if(getParityOfWeek()) {
         let tr = document.querySelectorAll('div.'+parity+' tr[class*="'+parity+'-0"] .day-of-week');
         if(parity == 'even') {
             for(let i = 0; i < tr.length; i++){
@@ -599,10 +596,8 @@ function nextDate(curr_date = currDate()) {
 
 function getParityOfWeek() {
     let week = getWeekNum();
-    // console.log(week);
-    if (week % 2 != 0) {
-        return 'even'
-    } else return 'odd';
+    // true: even, false: odd
+    return week % 2 == 0 ? true : false;
 }
 
 function getTablesOfWeek(odd, even) {
@@ -665,8 +660,5 @@ document.addEventListener('readystatechange', function() {
                 document.getElementsByClassName(''+day+'-'+parity +'-'+0)[0].scrollIntoView({behavior: "smooth"})
             }, 100);
         }
-        
-       
     } 
 })
-
