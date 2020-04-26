@@ -597,7 +597,7 @@ function nextDate(curr_date = currDate()) {
 function getParityOfWeek() {
     let week = getWeekNum();
     // true: even, false: odd
-    return week % 2 == 0 ? true : false;
+    return week % 2 != 0 ? true : false;
 }
 
 function getTablesOfWeek(odd, even) {
